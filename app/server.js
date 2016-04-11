@@ -24,3 +24,12 @@ app.get('/api/maincategory', function(req,res){
         res.end()
     });
 })
+
+app.get('/api/medication', function(req,res){
+    db_service.getMedication(function(result){
+        res.contentType('json')
+        res.setHeader('content-type', 'text/html;charset=utf-8');
+        res.write(JSON.stringify(result))
+        res.end()
+    });
+})

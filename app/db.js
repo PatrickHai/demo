@@ -16,18 +16,6 @@ var mongo = require('mongodb'), Server = mongo.Server, Db = mongo.Db;
 var server = new Server('localhost', 27017, {auto_reconnect: true});
 var db = new Db('test', server);
 
-exports.getCategory = function(success){
-  db.open(function(err, db) {
-      if(!err) {
-          db.collection('category', function(err, collection){
-            collection.find().toArray(function(error, bars){
-              success(bars);
-            });
-          });
-      }
-  });
-};
-
 exports.getMainCategory = function(success){
   db.open(function(err, db) {
       if(!err) {
@@ -44,18 +32,19 @@ exports.getMainCategory = function(success){
 
 var mysql = require('mysql');  
       
-var TEST_DATABASE = 'test';  
+var TEST_DATABASE = 'silk_tmp';  
   
 //创建连接  
 var client = mysql.createConnection({  
-  host: 'localhost',
+  host: '192.168.1.25',
   port: '3306',
-  user: 'root',  
-  password: '',  
+  user: 'silk_tmp',  
+  password: 'silk_tmp',  
 });  
 
 client.connect();
 client.query("use " + TEST_DATABASE);
+
 
 
 exports.getMedication = function(success){
@@ -91,4 +80,99 @@ exports.getMedication = function(success){
 };
   success(result); 
 };
+
+
+exports.getSummary = function(success){
+  client.query(  
+    'SELECT * FROM t_data_summary order by created desc limit 1',  
+    function(err, results, fields) {  
+      if (err) {  
+        throw err;  
+      }  
+        
+      if(results){
+        var data = {
+          id: results[0].id, 
+          drugs: results[0].drugs, 
+          illnesses: results[0].illnesses,
+          medications: results[0].medications,
+          inspects: results[0].inspects
+        };
+        success(data); 
+      }    
+    }  
+  ); 
+};
+
+exports.getCategory = function(type, success){
+  client.query(  
+    'select * from t_datatype_summary where data_series = '+ type,  
+    function(err, results, fields) {  
+      if (err) {  
+        throw err;  
+      }  
+        
+      if(results){
+        var data = new Array();
+        results.forEach(function(d){
+          data.push({category: d.data_type, value: parseInt(d.data_total)});
+        });
+        success(data); 
+      }    
+    }  
+  ); 
+};
+
+exports.getTrends = function(success){
+  client.query(  
+    'select * from t_data_summary order by workdate',  
+    function(err, results, fields) {  
+      if (err) {  
+        throw err;  
+      }  
+        
+      if(results){
+        var data = new Array();
+        results.forEach(function(d){
+          data.push(
+            {
+              dateKey: d.workdate, 
+              drugs: parseInt(d.drugs), 
+              illnesses: parseInt(d.illnesses), 
+              medications: parseInt(d.medications), 
+              inspects: parseInt(d.inspects)
+            });
+        });
+        success(data); 
+      }
+    }  
+  ); 
+};
+
+
+exports.getDrugList = function(drugName, success){
+  client.query(  
+    'select * from t_yongyao_detail where ypmc = '+ drugName,  
+    function(err, results, fields) {  
+      if (err) {  
+        throw err;  
+      }  
+      if(results){
+        var data = new Array();
+        results.forEach(function(d){
+          data.push(
+            {
+              dateKey: d.workdate, 
+              drugs: parseInt(d.drugs), 
+              illnesses: parseInt(d.illnesses), 
+              medications: parseInt(d.medications), 
+              inspects: parseInt(d.inspects)
+            });
+        });
+        success(data); 
+      }
+    }  
+  ); 
+};
+
 

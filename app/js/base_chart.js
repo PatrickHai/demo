@@ -1,8 +1,10 @@
-var drawBarChart = function(data, chart_id){
-
-  var margin = {top: 40, right: 20, bottom: 40, left: 40},
-    width = 860 - margin.left - margin.right,
-    height = 300 - margin.top - margin.bottom;
+var drawBarChart = function(data, chart_id, color){
+  console.log(data);
+  var parentWidth = $('#'+chart_id).parent().width();
+  var parentHeight = $('#'+chart_id).parent().height();
+  var margin = {top: parentHeight*0.3, right: parentWidth*0.02, bottom: parentHeight*0.02, left: parentWidth*0.02},
+      width = parentWidth - margin.left - margin.right,
+      height = parentHeight - margin.top - margin.bottom;
 
   var formatPercent = d3.format(".0%");
 
@@ -36,10 +38,11 @@ var drawBarChart = function(data, chart_id){
 
   svg.call(tip);
 
+  console.log(d3.max(data, function(d) { return d.value; }));
   x.domain(data.map(function(d) { return d.category; }));
   y.domain([0, d3.max(data, function(d) { return d.value; })]);
 
-  svg.append("g")
+  /*svg.append("g")
       .attr("class", "x axis")
       .attr("transform", "translate(0," + height + ")")
       .call(xAxis)
@@ -56,7 +59,7 @@ var drawBarChart = function(data, chart_id){
       .attr("transform", "rotate(-90)")
       .attr("y", 6)
       .attr("dy", ".71em")
-      .style("text-anchor", "end");
+      .style("text-anchor", "end");*/
 
   var bars = svg.selectAll(".bar")
       .data(data)
@@ -76,7 +79,7 @@ var drawBarChart = function(data, chart_id){
       .attr("y", function(d) { return y(d.value) })
       .attr("width", x.rangeBand())
       .attr("height", function(d) { return height - y(d.value); })
-      .attr("fill","#4DB39A")
+      .attr("fill",color)
       .attr("class", "bar");
 
   function type(d) {
@@ -659,26 +662,12 @@ var drawTreeChart = function(data, chart_id){
 }
 
 
-var draw_2lines_datekey = function(data, targets, svg_id){
-
-    var data = [
-      {dateKey:'2016-01-01', drugs: 11, illness: 20},
-      {dateKey:'2016-01-02', drugs: 12, illness: 19},
-      {dateKey:'2016-01-03', drugs: 13, illness: 18},
-      {dateKey:'2016-01-04', drugs: 14, illness: 17},
-      {dateKey:'2016-01-05', drugs: 15, illness: 16},
-      {dateKey:'2016-01-06', drugs: 16, illness: 15},
-      {dateKey:'2016-01-07', drugs: 17, illness: 14},
-      {dateKey:'2016-01-08', drugs: 18, illness: 13},
-      {dateKey:'2016-01-09', drugs: 19, illness: 12},
-      {dateKey:'2016-01-10', drugs: 20, illness: 11}
-    ];
-
-    var targets = [{target: 'drugs', des: '药品数量'},{target: 'illness', des: '疾病数量'}];
-
+var draw_2lines_datekey = function(data, targets, svg_id, linecolor, dotcolor){
     var svg = d3.select('#'+svg_id);
-    var width_svg = $('#'+svg_id).parent().width(),height_svg = 320;
-    var margin = {top: 20, right: 20, bottom: 60, left: 60};
+    var parentWidth = $('#'+svg_id).parent().width();
+    var parentHeight = $('#'+svg_id).parent().height();
+    var width_svg = parentWidth,height_svg = parentHeight;
+    var margin = {top: parentHeight*0.1, right: parentWidth*0.05, bottom: parentHeight*0.1, left: parentWidth*0.12};
     var width = width_svg - margin.left - margin.right;
     var height = height_svg - margin.top - margin.bottom;
 
@@ -690,13 +679,13 @@ var draw_2lines_datekey = function(data, targets, svg_id){
     svg.call(tip);
 
     var target1 = targets[0].target;
-    var target2 = targets[1].target;
+    // var target2 = targets[1].target;
 
-    var parseDate = d3.time.format("%Y-%m-%d").parse;
+    var parseDate = d3.time.format("%Y%m").parse;
     data.forEach(function(d) {
         d.dateKey = parseDate(d.dateKey);
         d[target1] = +d[target1];
-        d[target2] = +d[target2];
+        // d[target2] = +d[target2];
     });
 
     var x = d3.time.scale()
@@ -709,7 +698,7 @@ var draw_2lines_datekey = function(data, targets, svg_id){
         .scale(x)
         .orient("bottom")
         .tickFormat(function(d) {
-            return d3.time.format("%Y-%m-%d")(new Date(d));
+            return d3.time.format("%Y%m")(new Date(d));
         });
 
     if(data.length<10){
@@ -728,9 +717,9 @@ var draw_2lines_datekey = function(data, targets, svg_id){
         .x(function(d){return x(d.dateKey);})
         .y(function(d){return y(d[target1]);});
 
-    var line2 = d3.svg.line()
-        .x(function(d){return x(d.dateKey);})
-        .y(function(d){return y(d[target2]);});
+    // var line2 = d3.svg.line()
+    //     .x(function(d){return x(d.dateKey);})
+    //     .y(function(d){return y(d[target2]);});
 
     x.domain(d3.extent(data, function(d) { return d.dateKey; }));
     y.domain([0, d3.max(data, function(d) { return d[target1]; }) * 1.5]);
@@ -739,30 +728,34 @@ var draw_2lines_datekey = function(data, targets, svg_id){
     svg.append("path")
         .datum(data)
         .attr("transform","translate("+margin.left+","+margin.top+")")
-        .attr("class", "line")
+        .attr("class", linecolor)
         .attr("d", line1);
 
-    svg.append("path")
-        .datum(data)
-        .attr("transform","translate("+margin.left+","+margin.top+")")
-        .attr("class", "redline")
-        .attr("d", line2);
+    // svg.append("path")
+    //     .datum(data)
+    //     .attr("transform","translate("+margin.left+","+margin.top+")")
+    //     .attr("class", linecolor)
+    //     .attr("d", line2);
 
     svg.append("g")
         .attr("class", "y axis")
         .attr("transform","translate("+margin.left+","+margin.top+")")
-        .call(yAxis);
+        .call(yAxis)
+        .selectAll("text")
+        .style("fill", '#666')
+        .style('font-size', 7);
 
     svg.append("g")
         .attr("class", "x axis")
         .attr("transform", "translate("+margin.left+","+(height + margin.top)+")")
         .call(xAxis)
         .selectAll("text")
-        .style("text-anchor", "end")
+        .style("fill", '#666')
+        .style('font-size', 7);
         // .attr("transform", function(){
         //     return "rotate(-30)"
-        // })
-        .attr("transform","translate(20,0)");
+        // });
+        // .attr("transform","translate(20,0)");
 
     //add points
     var g = svg.selectAll('circle')
@@ -770,7 +763,7 @@ var draw_2lines_datekey = function(data, targets, svg_id){
         .enter()
         .append('g')
         .append('circle')
-        .attr('class', 'bluelinecircle')
+        .attr('class', dotcolor)
         .attr('cx', line1.x())
         .attr('cy', line1.y())
         .attr('r', 2.5)
@@ -778,7 +771,7 @@ var draw_2lines_datekey = function(data, targets, svg_id){
         .on('mouseover', function(d) {
             d3.select(this).transition().duration(500).attr('r', 4);
             var html = "<ul>" +
-                "<li>日期："+ d3.time.format("%Y-%m-%d")(d.dateKey) + "</li>" +
+                "<li>日期："+ d3.time.format("%Y-%m")(d.dateKey) + "</li>" +
                 "<li>"+targets[0].des+"："+ d[target1] + "</li>" +
                 "</ul>";
             tip.html(html);
@@ -789,29 +782,29 @@ var draw_2lines_datekey = function(data, targets, svg_id){
             tip.hide();
         });
 
-    var g = svg.selectAll('circle1')
-        .data(data)
-        .enter()
-        .append('g')
-        .append('circle')
-        .attr('class', 'redlinecircle')
-        .attr('cx', line2.x())
-        .attr('cy', line2.y())
-        .attr('r', 2.5)
-        .attr("transform", "translate("+margin.left+","+margin.top+")")
-        .on('mouseover', function(d) {
-            d3.select(this).transition().duration(500).attr('r', 4);
-            var html = "<ul>" +
-                "<li>日期："+ d3.time.format("%Y-%m-%d")(d.dateKey) + "</li>" +
-                "<li>"+targets[1].des+"："+ d[target2] + "</li>" +
-                "</ul>";
-            tip.html(html);
-            tip.show();
-        })
-        .on('mouseout', function() {
-            d3.select(this).transition().duration(500).attr('r', 2.5);
-            tip.hide();
-        });
+    // var g = svg.selectAll('circle1')
+    //     .data(data)
+    //     .enter()
+    //     .append('g')
+    //     .append('circle')
+    //     .attr('class', 'redlinecircle')
+    //     .attr('cx', line2.x())
+    //     .attr('cy', line2.y())
+    //     .attr('r', 2.5)
+    //     .attr("transform", "translate("+margin.left+","+margin.top+")")
+    //     .on('mouseover', function(d) {
+    //         d3.select(this).transition().duration(500).attr('r', 4);
+    //         var html = "<ul>" +
+    //             "<li>日期："+ d3.time.format("%Y-%m-%d")(d.dateKey) + "</li>" +
+    //             "<li>"+targets[1].des+"："+ d[target2] + "</li>" +
+    //             "</ul>";
+    //         tip.html(html);
+    //         tip.show();
+    //     })
+    //     .on('mouseout', function() {
+    //         d3.select(this).transition().duration(500).attr('r', 2.5);
+    //         tip.hide();
+    //     });
 
     // svg.append("g").append("rect")
     //     .attr("x",width_svg * 0.25)
@@ -843,3 +836,79 @@ var draw_2lines_datekey = function(data, targets, svg_id){
     //     .text(targets[1].des);
 
 }
+
+var drawDonut3d = function(svg_id){
+  var salesData=[
+  {label:"Basic", color:"#3366CC"},
+  {label:"Plus", color:"#DC3912"},
+  {label:"Lite", color:"#FF9900"},
+  {label:"Elite", color:"#109618"},
+  {label:"Delux", color:"#990099"}
+  ];
+
+  var parentWidth = $('#'+svg_id).parent().width();
+  var parentWidth = $('#'+svg_id).parent().width();
+
+  var svg = d3.select("#"+svg_id).attr("width",parentWidth).attr("height",parentWidth);
+
+  svg.append("g").attr("id","salesDonut");
+  svg.append("g").attr("id","quotesDonut");
+
+  Donut3D.draw("salesDonut", randomData(), 150, 150, 130, 100, 30, 0.4);
+  Donut3D.draw("quotesDonut", randomData(), 450, 150, 130, 100, 30, 0);
+    
+  function changeData(){
+    Donut3D.transition("salesDonut", randomData(), 130, 100, 30, 0.4);
+    Donut3D.transition("quotesDonut", randomData(), 130, 100, 30, 0);
+  }
+
+  function randomData(){
+    return salesData.map(function(d){ 
+      return {label:d.label, value:1000*Math.random(), color:d.color};});
+  }
+
+}
+var drawPie = function(svg_id){
+  var data = [{drugType: '中药', value:5}, {drugType: '中成药', value:3}, {drugType: '西药', value:2}];
+  var parentWidth = $('#'+svg_id).parent().width();
+  var parentHeight = $('#'+svg_id).parent().height();
+  var width = parentWidth*0.9,height = parentHeight*0.9,radius = Math.min(width, height) / 2;
+
+  var color = d3.scale.ordinal()
+    .range(["#10a0de", "#7bcc3a", "#ffd162"]);
+
+  var arc = d3.svg.arc()
+      .outerRadius(radius - parentHeight/15)
+      .innerRadius(20);
+
+  var labelArc = d3.svg.arc()
+      .outerRadius(radius - 35)
+      .innerRadius(radius - 35);
+
+  var pie = d3.layout.pie()
+      .sort(null)
+      .value(function(d) { return d.value; });
+
+  var svg = d3.select("#"+svg_id)
+      .attr("width", width)
+      .attr("height", height)
+      .append("g")
+      .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");  
+
+
+  var g = svg.selectAll(".arc")
+      .data(pie(data))
+      .enter().append("g")
+      .attr("class", "arc");
+
+    g.append("path")
+        .attr("d", arc)
+        .style("fill", function(d) { return color(d.data.drugType); });
+
+    g.append("text")
+        .attr("transform", function(d) { return "translate(" + labelArc.centroid(d) + ")"; })
+        .attr("dy", ".35em")
+        .text(function(d) { return d.data.drugType; });  
+}
+
+

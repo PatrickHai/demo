@@ -218,13 +218,13 @@ body {
 .axis path,
 .axis line{
     fill: none;
-    stroke: black;
+    stroke: #666;
     shape-rendering: crispEdges;
 }
 
-.bar{
+/*.bar{
     fill: #69c5ff ;
-}
+}*/
 
 .redbar{
     fill: #FF9D6F ;
@@ -238,11 +238,11 @@ body {
     fill: orangered ;
 }
 .x.axis line {
-    stroke: #777;
+    stroke: #666;
     stroke-dasharray: 2,2;
 }
 .y.axis line {
-    stroke: #777;
+    stroke: #666;
     stroke-dasharray: 2,2;
 }
 
@@ -280,7 +280,21 @@ body {
 
 .redline {
     fill: none;
-    stroke: #FF9D6F;
+    stroke: #f74b4b;
+    stroke-width: 1.5px;
+    stroke-opacity:1.2;
+}
+
+.blueline {
+    fill: none;
+    stroke: #10a0de;
+    stroke-width: 1.5px;
+    stroke-opacity:1.2;
+}
+
+.yellowline {
+    fill: none;
+    stroke: #ffd162;
     stroke-width: 1.5px;
     stroke-opacity:1.2;
 }
@@ -290,13 +304,20 @@ body {
 }
 
 .redlinecircle {
-    fill: #FF9D6F;
+    fill: #f74b4b;
 }
 
 .bluelinecircle {
     fill: #69c5ff;
 }
 
+.yellowlinecircle {
+    fill: #ffd162;
+}
+
+.greenlinecircle {
+    fill: #99CC33;
+}
 .largeChart{
     padding-top: 6px;
 }

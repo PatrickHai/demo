@@ -21,7 +21,7 @@
   <div class="col-md-3 grid-cell clearfix">
     <div class="iconbox">
       <div class="content-box">
-        <div class="pull-content"><i class="icon iconfont text-blue">&#xe663;</i></div>
+        <div class="pull-content"><i class="icon iconfont text-blue">&#xe680;</i></div>
         <div class="content">
           <div class="text-sm text-muted">药品 DRUGS</div>
           <div class="text-lg text-blue" id="drugs"></div>
@@ -32,7 +32,7 @@
   <div class="col-md-3 grid-cell">
     <div class="iconbox">
       <div class="content-box">
-        <div class="pull-content"><i class="icon iconfont text-green">&#xe672;</i></div>
+        <div class="pull-content"><i class="icon iconfont text-green">&#xe683;</i></div>
         <div class="content">
           <div class="text-sm text-muted">疾病病症 JIBING</div>
           <div class="text-lg text-green" id="illnesses"></div>
@@ -43,7 +43,7 @@
   <div class="col-md-3 grid-cell">
     <div class="iconbox">
       <div class="content-box">
-        <div class="pull-content"><i class="icon iconfont text-yellow">&#xe664;</i></div>
+        <div class="pull-content"><i class="icon iconfont text-yellow">&#xe681;</i></div>
         <div class="content">
           <div class="text-sm text-muted">合理用药 USEAGE</div>
           <div class="text-lg text-yellow" id="medications"></div>
@@ -54,7 +54,7 @@
   <div class="col-md-3 grid-cell">
     <div class="iconbox">
       <div class="content-box">
-        <div class="pull-content"><i class="icon iconfont text-red">&#xe66c;</i></div>
+        <div class="pull-content"><i class="icon iconfont text-red">&#xe684;</i></div>
         <div class="content">
           <div class="text-sm text-muted">检查化验 OBERSERVATION</div>
           <div class="text-lg text-red" id="inspects"></div>
@@ -64,18 +64,22 @@
   </div>
   <div class="blk-2x"></div>
   <div class="col-md-3">
-    <div class="icon heading grid-cell"><i class="icon iconfont text-blue">&#xe66c;</i><b>药品概况</b></div>
+    <div class="icon heading grid-cell"><i class="icon iconfont text-blue">&#xe680;</i><b>药品概况</b></div>
     <div class="grid-cell chart">
-      <div class="heading">药品剂型分布</div>
-      <svg id="bar-chart"></svg>
+      <div class="heading">药品大类分布</div>
+      <div id="pie"><svg id="pie-chart"></svg></div>
     </div>
     <div class="grid-cell chart">
       <div class="heading">药品增长走势(近六个月)</div>
       <svg id="line-chart"></svg>
     </div>
+<!--     <div class="grid-cell chart">
+      <div class="heading">药品剂型分布</div>
+      <svg id="bar-chart"></svg>
+    </div> -->
   </div>
   <div class="col-md-3">
-    <div class="icon heading grid-cell"><i class="icon iconfont text-green">&#xe66c;</i><b>疾病概览</b></div>
+    <div class="icon heading grid-cell"><i class="icon iconfont text-green">&#xe683;</i><b>疾病概览</b></div>
     <div class="grid-cell chart">
       <div class="heading">疾病类型分布</div>
       <svg id="bar-chart1"></svg>
@@ -87,11 +91,11 @@
     </div>
   </div>
   <div class="col-md-3">
-    <div class="icon heading grid-cell"><i class="icon iconfont text-yellow">&#xe66c;</i><b>合理用药概览</b></div>
+    <div class="icon heading grid-cell"><i class="icon iconfont text-yellow">&#xe681;</i><b>合理用药概览</b></div>
     <div class="grid-cell chart">
       <div class="heading">合理用药分布</div>
-      <!-- <svg id="bar-chart2"></svg> -->
-      <svg id="liquid_chart" onclick="switchLiquid()"></svg>
+      <svg id="bar-chart2"></svg>
+      <!-- <svg id="liquid_chart" onclick="switchLiquid()"></svg> -->
     </div>
     <div class="grid-cell chart">
       <div class="heading">合理用药走势</div>
@@ -99,11 +103,10 @@
     </div>
   </div>
   <div class="col-md-3">
-    <div class="icon heading grid-cell"><i class="icon iconfont text-red">&#xe66c;</i><b>检查化验概览</b></div>
+    <div class="icon heading grid-cell"><i class="icon iconfont text-red">&#xe682;</i><b>检查化验概览</b></div>
     <div class="grid-cell chart">
       <div class="heading">检查化验分布</div>
-      <!-- <svg id="bar-chart3"></svg> -->
-      <svg id="pie-chart"></svg>
+      <svg id="bar-chart3"></svg>
     </div>
     <div class="grid-cell chart">
       <div class="heading">检查化验走势</div>
@@ -111,7 +114,7 @@
     </div>
   </div>
   <div class="blk-4x"></div>
-  <div class="icon heading"><i class="icon iconfont text-green">&#xe66c;</i><b>最新药品</b></div>
+  <div class="icon heading"><i class="icon iconfont text-green">&#xe680;</i><b>最新药品</b></div>
   <div class="blk-1x"></div>
   <div class="search">
     <input type="text" id="dragName" class="form-control" placeholder="请输入药品名称和编码">
@@ -121,8 +124,8 @@
       <tr>
         <th>药品名称</th>
         <th>药品规格</th>
-        <th>主要成分</th>
-        <th>适应症状</th>
+        <th>剂型</th>
+        <th>用法用量</th>
         <th>生产厂家</th>
       </tr>
     </thead>

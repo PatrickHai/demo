@@ -643,7 +643,7 @@ body {
 }
 
 .grid-cell.chart {
-  min-height: 200px;
+  min-height: 260px;
 }
 
 caption {
@@ -676,7 +676,6 @@ table tr>td {
 table tr>td>a {
   color: #7bcc3a
 }
-
 
 .form-control {
   background: #000;

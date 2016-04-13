@@ -1,5 +1,4 @@
 var drawBarChart = function(data, chart_id, color){
-  console.log(data);
   var parentWidth = $('#'+chart_id).parent().width();
   var parentHeight = $('#'+chart_id).parent().height();
   var margin = {top: parentHeight*0.3, right: parentWidth*0.02, bottom: parentHeight*0.02, left: parentWidth*0.02},
@@ -38,7 +37,6 @@ var drawBarChart = function(data, chart_id, color){
 
   svg.call(tip);
 
-  console.log(d3.max(data, function(d) { return d.value; }));
   x.domain(data.map(function(d) { return d.category; }));
   y.domain([0, d3.max(data, function(d) { return d.value; })]);
 
@@ -869,17 +867,17 @@ var drawDonut3d = function(svg_id){
 
 }
 var drawPie = function(svg_id){
-  var data = [{drugType: '中药', value:5}, {drugType: '中成药', value:3}, {drugType: '西药', value:2}];
+  var data = [{type: '中药', value:5}, {type: '中成药', value:3}, {type: '西药', value:2}];
   var parentWidth = $('#'+svg_id).parent().width();
   var parentHeight = $('#'+svg_id).parent().height();
   var width = parentWidth*0.9,height = parentHeight*0.9,radius = Math.min(width, height) / 2;
 
   var color = d3.scale.ordinal()
-    .range(["#10a0de", "#7bcc3a", "#ffd162"]);
+    .range(["#10a0de", "#7bcc3a", "#f74b4b"]);
 
   var arc = d3.svg.arc()
       .outerRadius(radius - parentHeight/15)
-      .innerRadius(20);
+      .innerRadius(parentWidth*0.125);
 
   var labelArc = d3.svg.arc()
       .outerRadius(radius - 35)
@@ -903,12 +901,60 @@ var drawPie = function(svg_id){
 
     g.append("path")
         .attr("d", arc)
-        .style("fill", function(d) { return color(d.data.drugType); });
+        .style("fill", function(d) { return color(d.data.type); });
 
-    g.append("text")
-        .attr("transform", function(d) { return "translate(" + labelArc.centroid(d) + ")"; })
-        .attr("dy", ".35em")
-        .text(function(d) { return d.data.drugType; });  
+    // g.append("text")
+    //     .attr("transform", function(d) { return "translate(" + labelArc.centroid(d) + ")"; })
+    //     .attr("dy", ".35em")
+    //     .text(function(d) { return d.data.drugType; });  
+
+    legend(data, $('#'+svg_id).parent().attr('id'));
+}
+function segColor(c){ return {"中药":"#10a0de", "西药":"#7bcc3a","中成药":"#f74b4b"}[c]; };
+// function to handle legend.
+function legend(lD, id){
+    var leg = {};
+    var parentWidth = $('#'+id).parent().width();
+    var parentHeight = $('#'+id).parent().height();
+    // create table for legend.
+    var legend = d3.select('#'+id).append("table");
+    
+    // create one row per segment.
+    var tr = legend.append("tbody").selectAll("tr").data(lD).enter().append("tr");
+        
+    // create the first column for each segment.
+    tr.append("td").append("svg").attr("width", parentWidth*0.03).attr("height", parentHeight*0.03).append("rect")
+        .attr("width", parentWidth*0.03).attr("height", parentHeight*0.03)
+    .attr("fill",function(d){ return segColor(d.type); });
+        
+    // create the second column for each segment.
+    tr.append("td").text(function(d){ return d.type;});
+
+    // create the third column for each segment.
+    tr.append("td").attr("class",'legendFreq')
+        .text(function(d){ return d3.format(",")(d.value);});
+
+    // create the fourth column for each segment.
+    tr.append("td").attr("class",'legendPerc')
+        .text(function(d){ return getLegend(d,lD);});
+
+    // Utility function to be used to update the legend.
+    leg.update = function(nD){
+        // update the data attached to the row elements.
+        var l = legend.select("tbody").selectAll("tr").data(nD);
+
+        // update the frequencies.
+        l.select(".legendFreq").text(function(d){ return d3.format(",")(d.value);});
+
+        // update the percentage column.
+        l.select(".legendPerc").text(function(d){ return getLegend(d,nD);});        
+    }
+    
+    function getLegend(d,aD){ // Utility function to compute percentage.
+        return d3.format("%")(d.value/d3.sum(aD.map(function(v){ return v.value; })));
+    }
+
+    return leg;
 }
 
 

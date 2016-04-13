@@ -34,13 +34,22 @@ var mysql = require('mysql');
       
 var TEST_DATABASE = 'silk_tmp';  
   
-//创建连接  
+// 创建连接  
 var client = mysql.createConnection({  
-  host: '192.168.1.25',
+  host: '123.56.204.219',
   port: '3306',
   user: 'silk_tmp',  
   password: 'silk_tmp',  
 });  
+
+
+// var TEST_DATABASE = 'test';  
+// var client = mysql.createConnection({  
+//   host: 'localhost',
+//   port: '3306',
+//   user: 'root',  
+//   password: '',  
+// });  
 
 client.connect();
 client.query("use " + TEST_DATABASE);
@@ -90,7 +99,7 @@ exports.getSummary = function(success){
         throw err;  
       }  
         
-      if(results){
+      if(results[0]){
         var data = {
           id: results[0].id, 
           drugs: results[0].drugs, 
@@ -152,7 +161,7 @@ exports.getTrends = function(success){
 
 exports.getDrugList = function(drugName, success){
   client.query(  
-    'select * from t_yongyao_detail where ypmc = '+ drugName,  
+    'select * from t_yongyao_detail where ypmc like "%'+ drugName +'%" limit 10',
     function(err, results, fields) {  
       if (err) {  
         throw err;  
@@ -163,10 +172,11 @@ exports.getDrugList = function(drugName, success){
           data.push(
             {
               dateKey: d.workdate, 
-              drugs: parseInt(d.drugs), 
-              illnesses: parseInt(d.illnesses), 
-              medications: parseInt(d.medications), 
-              inspects: parseInt(d.inspects)
+              ypmc: d.ypmc,
+              gg: d.gg, 
+              jx: d.jx, 
+              yfyl: d.yfyl,
+              scqy: d.scqy
             });
         });
         success(data); 

@@ -73,8 +73,8 @@ var initData = function(){
   getSummary();
   getDosageType();
   getIllnessType();
-  // getRationalUse();
-  // getInspects();
+  getRationalUse();
+  getInspects();
   getTrends();
 
   $.ajax({
@@ -103,19 +103,23 @@ var initData = function(){
     });
   });
 
-  // $('#dragName').bind('keypress',function(event){
-  //   var dragName = $('#dragName').value();
-  //   if(event.keyCode == '13'){
-  //       $.ajax({
-  //         url: '/api/druglist',
-  //         type: 'GET',
-  //         data: {drugName: },
-  //         success: function(e){
-  //           drawTreeChart(JSON.parse(e), 'tree-chart');
-  //         }
-  //       });
-  //   }
-  // });
+  $('#dragName').bind('keypress',function(event){
+    var dragName = $('#dragName').val();
+    if(event.keyCode == '13' && dragName != ''){
+        $.ajax({
+          url: '/api/druglist',
+          type: 'GET',
+          data: {drugName: dragName},
+          success: function(e){
+              var results = JSON.parse(e);
+              $('tbody').empty();
+              results.forEach(function(d){
+                $('tbody').append('<tr><td>'+d.ypmc+'</td><td>'+d.gg+'</td><td>'+d.jx+'</td><td>'+d.yfyl+'</td><td>'+d.scqy+'</td></tr>');
+              });
+          }
+        });
+    }
+  });
 
   // drawDonut3d('donut3d-chart');
   drawPie('pie-chart');

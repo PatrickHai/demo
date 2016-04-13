@@ -84,11 +84,10 @@ app.get('/api/summary', function(req,res){
 
 app.get('/api/druglist', function(req,res){
     var urlObj = url.parse(req.url, true, false);
-    console.log(urlObj);
-    // db_service.getDrugList(drugName, function(result){
-    //     res.contentType('json')
-    //     res.setHeader('content-type', 'text/html;charset=utf-8');
-    //     res.write(JSON.stringify(result))
-    //     res.end()
-    // });
+    db_service.getDrugList(urlObj.query.drugName, function(result){
+        res.contentType('json')
+        res.setHeader('content-type', 'text/html;charset=utf-8');
+        res.write(JSON.stringify(result))
+        res.end()
+    });
 })

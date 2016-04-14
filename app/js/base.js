@@ -112,9 +112,9 @@ var initData = function(){
           data: {drugName: dragName},
           success: function(e){
               var results = JSON.parse(e);
-              $('tbody').empty();
+              $('#drugList').empty();
               results.forEach(function(d){
-                $('tbody').append('<tr><td>'+d.ypmc+'</td><td>'+d.gg+'</td><td>'+d.jx+'</td><td>'+d.yfyl+'</td><td>'+d.scqy+'</td></tr>');
+                $('#drugList').append('<tr><td>'+d.ypmc+'</td><td>'+d.gg+'</td><td>'+d.jx+'</td><td>'+d.yfyl+'</td><td>'+d.scqy+'</td></tr>');
               });
           }
         });

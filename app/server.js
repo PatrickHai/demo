@@ -91,3 +91,12 @@ app.get('/api/druglist', function(req,res){
         res.end()
     });
 })
+
+app.get('/api/drugsType', function(req,res){
+    db_service.getDrugsType(function(result){
+        res.contentType('json')
+        res.setHeader('content-type', 'text/html;charset=utf-8');
+        res.write(JSON.stringify(result))
+        res.end()
+    });
+})

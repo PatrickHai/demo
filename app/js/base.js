@@ -76,7 +76,7 @@ var initData = function(){
   getRationalUse();
   getInspects();
   getTrends();
-
+  getDrugType();
   $.ajax({
     url: '/api/maincategory',
     type: 'GET',
@@ -122,7 +122,17 @@ var initData = function(){
   });
 
   // drawDonut3d('donut3d-chart');
-  drawPie('pie-chart');
+  
+}
+
+var getDrugType = function(){
+  $.ajax({
+    url: '/api/drugsType',
+    type: 'GET',
+    success: function(e){
+      drawPie(JSON.parse(e), 'pie-chart');
+    }
+  });
 }
 
 var initTree = function(){

@@ -665,7 +665,7 @@ var draw_2lines_datekey = function(data, targets, svg_id, linecolor, dotcolor){
     var parentWidth = $('#'+svg_id).parent().width();
     var parentHeight = $('#'+svg_id).parent().height();
     var width_svg = parentWidth,height_svg = parentHeight;
-    var margin = {top: parentHeight*0.1, right: parentWidth*0.05, bottom: parentHeight*0.1, left: parentWidth*0.12};
+    var margin = {top: parentHeight*0.3, right: parentWidth*0.05, bottom: parentHeight*0.1, left: parentWidth*0.12};
     var width = width_svg - margin.left - margin.right;
     var height = height_svg - margin.top - margin.bottom;
 
@@ -866,15 +866,10 @@ var drawDonut3d = function(svg_id){
   }
 
 }
-var drawPie = function(svg_id){
-  var data = [{type: '中药', value:5}, {type: '中成药', value:3}, {type: '西药', value:2}];
+var drawPie = function(data, svg_id){
   var parentWidth = $('#'+svg_id).parent().width();
   var parentHeight = $('#'+svg_id).parent().height();
   var width = parentWidth*0.9,height = parentHeight*0.9,radius = Math.min(width, height) / 2;
-
-  var color = d3.scale.ordinal()
-    .range(["#10a0de", "#7bcc3a", "#f74b4b"]);
-
   var arc = d3.svg.arc()
       .outerRadius(radius - parentHeight/15)
       .innerRadius(parentWidth*0.125);
@@ -901,7 +896,7 @@ var drawPie = function(svg_id){
 
     g.append("path")
         .attr("d", arc)
-        .style("fill", function(d) { return color(d.data.type); });
+        .style("fill", function(d) { return segColor(d.data.type); });
 
     // g.append("text")
     //     .attr("transform", function(d) { return "translate(" + labelArc.centroid(d) + ")"; })

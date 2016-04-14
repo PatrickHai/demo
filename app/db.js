@@ -185,4 +185,26 @@ exports.getDrugList = function(drugName, success){
   ); 
 };
 
+exports.getDrugsType = function(success){
+  client.query(  
+    'select * from t_drugstype',
+    function(err, results, fields) {  
+      if (err) {  
+        throw err;  
+      }  
+      if(results){
+        var data = new Array();
+        results.forEach(function(d){
+          data.push(
+            {
+              type: d.type_name,
+              value: d.type_count
+            });
+        });
+        success(data); 
+      }
+    }  
+  ); 
+};
+
 

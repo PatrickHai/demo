@@ -1,74 +1,468 @@
 <!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+body{
+  background: #000;
+}
+.node {
+  stroke: #fff;
+  stroke-width: 0;
+  opacity: 0.95;
+}
 
-<html>
-<head>
-  <meta charset="utf-8">
-  <title></title>
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
-  <link rel="stylesheet" href="css/chart-styles.css" />
-  <style type="text/css">
-  
-  .node {
-    cursor: pointer;
-  }
+.link {
+  stroke: #999;
+  stroke-opacity: .5;
+  stroke-width: 1.5;
+}
+.link.inactive {
+  stroke: #999;
+  stroke-opacity: 0;
+}
+.link.active {
+  stroke: #fff;
+  stroke-opacity: 0.75;
+  stroke-width: 2;
+}
 
-  .overlay{
-      background-color:#EEE;
-  }
-   
-  .node circle {
-    fill: #fff;
-    stroke: steelblue;
-    stroke-width: 1.5px;
-  }
-   
-  .node text {
-    font-size:10px; 
-    font-family:sans-serif;
-  }
-   
-  .link {
-    fill: none;
-    stroke: #ccc;
-    stroke-width: 1.5px;
-  }
+.d3-force-tip{
+  padding:3px 10px;
+  font-size: 12px;
+  line-height: 16px;
+  z-index: 99999;
+}
+.d3-force-tip .force-name{
+  font-size: 18px;
+  line-height: 20px;
+  font-weight: bold;
+  color:rgba(255,255,255,1);
+  margin-right: 5px;
+  text-shadow: 0px 0px 5px rgba(0,0,0,0.8);
+}
+.d3-force-tip .force-type{
+  font-size: 12px;
+  font-weight: bold;
+  color:rgba(255,255,255,0.8);
+  text-shadow: 0px 0px 5px rgba(0,0,0,0.8);
+}
 
-  .templink {
-    fill: none;
-    stroke: red;
-    stroke-width: 3px;
-  }
-
-  .ghostCircle.show{
-      display:block;
-  }
-
-  .ghostCircle, .activeDrag .ghostCircle{
-       display: none;
-  }
 
 </style>
-  <script src="bower_components/jquery-2.2.3.min/index.js"></script>
-  <script src="bower_components/d3/d3.min.js"></script>
-  <script src="bower_components/d3-tip/index.js"></script>
-  <script src="js/base_chart.js"></script>
-  <script>
-  var initTree = function(){
-    $.ajax({
-        url: '/api/medication',
-        type: 'GET',
-        success: function(e){
-          drawTreeChart(JSON.parse(e), 'tree-chart');
-        }
-      });
-  }
-  $(document).ready(function(){
-    initTree();
-  });
-  </script>
-</head>
-
 <body>
-  <div id="tree-chart"></div>
-</body>
+<script src="bower_components/d3/d3.min.js"></script>
+<script src="bower_components/d3-tip/index.js"></script>
+<script>
+var DataCircles =[
+  {"name":"Myriel","type":1},
+  {"name":"Napoleon","type":1},
+  {"name":"Mlle.Baptistine","type":1},
+  {"name":"Mme.Magloire","type":1},
+  {"name":"CountessdeLo","type":1},
+  {"name":"Geborand","type":1},
+  {"name":"Champtercier","type":1},
+  {"name":"Cravatte","type":1},
+  {"name":"Count","type":1},
+  {"name":"OldMan","type":1},
+  {"name":"Labarre","type":2},
+  {"name":"Valjean","type":2},
+  {"name":"Marguerite","type":3},
+  {"name":"Mme.deR","type":2},
+  {"name":"Isabeau","type":2},
+  {"name":"Gervais","type":2},
+  {"name":"Tholomyes","type":3},
+  {"name":"Listolier","type":3},
+  {"name":"Fameuil","type":3},
+  {"name":"Blacheville","type":3},
+  {"name":"Favourite","type":3},
+  {"name":"Dahlia","type":3},
+  {"name":"Zephine","type":3},
+  {"name":"Fantine","type":3},
+  {"name":"Mme.Thenardier","type":4},
+  {"name":"Thenardier","type":4},
+  {"name":"Cosette","type":5},
+  {"name":"Javert","type":4},
+  {"name":"Fauchelevent","type":0},
+  {"name":"Bamatabois","type":2},
+  {"name":"Perpetue","type":3},
+  {"name":"Simplice","type":2},
+  {"name":"Scaufflaire","type":2},
+  {"name":"Woman1","type":2},
+  {"name":"Judge","type":2},
+  {"name":"Champmathieu","type":2},
+  {"name":"Brevet","type":2},
+  {"name":"Chenildieu","type":2},
+  {"name":"Cochepaille","type":2},
+  {"name":"Pontmercy","type":4},
+  {"name":"Boulatruelle","type":6},
+  {"name":"Eponine","type":4},
+  {"name":"Anzelma","type":4},
+  {"name":"Woman2","type":5},
+  {"name":"MotherInnocent","type":0},
+  {"name":"Gribier","type":0},
+  {"name":"Jondrette","type":7},
+  {"name":"Mme.Burgon","type":7},
+  {"name":"Gavroche","type":8},
+  {"name":"Gillenormand","type":5},
+  {"name":"Magnon","type":5},
+  {"name":"Mlle.Gillenormand","type":5},
+  {"name":"Mme.Pontmercy","type":5},
+  {"name":"Mlle.Vaubois","type":5},
+  {"name":"Lt.Gillenormand","type":5},
+  {"name":"Marius","type":8},
+  {"name":"BaronessT","type":5},
+  {"name":"Mabeuf","type":8},
+  {"name":"Enjolras","type":8},
+  {"name":"Combeferre","type":8},
+  {"name":"Prouvaire","type":8},
+  {"name":"Feuilly","type":8},
+  {"name":"Courfeyrac","type":8},
+  {"name":"Bahorel","type":8},
+  {"name":"Bossuet","type":8},
+  {"name":"Joly","type":8},
+  {"name":"Grantaire","type":8},
+  {"name":"MotherPlutarch","type":9},
+  {"name":"Gueulemer","type":4},
+  {"name":"Babet","type":4},
+  {"name":"Claquesous","type":4},
+  {"name":"Montparnasse","type":4},
+  {"name":"Toussaint","type":5},
+  {"name":"Child1","type":10},
+  {"name":"Child2","type":10},
+  {"name":"Brujon","type":4},
+  {"name":"Mme.Hucheloup","type":8}
+];
+var dataLines = [
+  {"source":1,"target":0},
+  {"source":2,"target":0},
+  {"source":3,"target":0},
+  {"source":3,"target":0},
+  {"source":4,"target":0},
+  {"source":5,"target":0},
+  {"source":6,"target":0},
+  {"source":7,"target":0},
+  {"source":8,"target":0},
+  {"source":9,"target":0},
+  {"source":11,"target":10},
+  {"source":11,"target":3},
+  {"source":11,"target":2},
+  {"source":12,"target":11},
+  {"source":13,"target":11},
+  {"source":14,"target":11},
+  {"source":15,"target":11},
+  {"source":17,"target":16},
+  {"source":18,"target":16},
+  {"source":18,"target":17},
+  {"source":19,"target":16},
+  {"source":19,"target":17},
+  {"source":19,"target":18},
+  {"source":20,"target":16},
+  {"source":20,"target":17},
+  {"source":20,"target":18},
+  {"source":20,"target":19},
+  {"source":21,"target":16},
+  {"source":21,"target":17},
+  {"source":21,"target":18},
+  {"source":21,"target":19},
+  {"source":21,"target":20},
+  {"source":22,"target":16},
+  {"source":22,"target":17},
+  {"source":22,"target":18},
+  {"source":22,"target":19},
+  {"source":22,"target":20},
+  {"source":22,"target":21},
+  {"source":23,"target":16},
+  {"source":23,"target":17},
+  {"source":23,"target":18},
+  {"source":23,"target":19},
+  {"source":23,"target":20},
+  {"source":23,"target":21},
+  {"source":23,"target":22},
+  {"source":23,"target":12},
+  {"source":23,"target":11},
+  {"source":24,"target":23},
+  {"source":24,"target":11},
+  {"source":25,"target":24},
+  {"source":25,"target":23},
+  {"source":25,"target":11},
+  {"source":26,"target":24},
+  {"source":26,"target":11},
+  {"source":26,"target":16},
+  {"source":26,"target":25},
+  {"source":27,"target":11},
+  {"source":27,"target":23},
+  {"source":27,"target":25},
+  {"source":27,"target":24},
+  {"source":27,"target":26},
+  {"source":28,"target":11},
+  {"source":28,"target":27},
+  {"source":29,"target":23},
+  {"source":29,"target":27},
+  {"source":29,"target":11},
+  {"source":30,"target":23},
+  {"source":31,"target":30},
+  {"source":31,"target":11},
+  {"source":31,"target":23},
+  {"source":31,"target":27},
+  {"source":32,"target":11},
+  {"source":33,"target":11},
+  {"source":33,"target":27},
+  {"source":34,"target":11},
+  {"source":34,"target":29},
+  {"source":35,"target":11},
+  {"source":35,"target":34},
+  {"source":35,"target":29},
+  {"source":36,"target":34},
+  {"source":36,"target":35},
+  {"source":36,"target":11},
+  {"source":36,"target":29},
+  {"source":37,"target":34},
+  {"source":37,"target":35},
+  {"source":37,"target":36},
+  {"source":37,"target":11},
+  {"source":37,"target":29},
+  {"source":38,"target":34},
+  {"source":38,"target":35},
+  {"source":38,"target":36},
+  {"source":38,"target":37},
+  {"source":38,"target":11},
+  {"source":38,"target":29},
+  {"source":39,"target":25},
+  {"source":40,"target":25},
+  {"source":41,"target":24},
+  {"source":41,"target":25},
+  {"source":42,"target":41},
+  {"source":42,"target":25},
+  {"source":42,"target":24},
+  {"source":43,"target":11},
+  {"source":43,"target":26},
+  {"source":43,"target":27},
+  {"source":44,"target":28},
+  {"source":44,"target":11},
+  {"source":45,"target":28},
+  {"source":47,"target":46},
+  {"source":48,"target":47},
+  {"source":48,"target":25},
+  {"source":48,"target":27},
+  {"source":48,"target":11},
+  {"source":49,"target":26},
+  {"source":49,"target":11},
+  {"source":50,"target":49},
+  {"source":50,"target":24},
+  {"source":51,"target":49},
+  {"source":51,"target":26},
+  {"source":51,"target":11},
+  {"source":52,"target":51},
+  {"source":52,"target":39},
+  {"source":53,"target":51},
+  {"source":54,"target":51},
+  {"source":54,"target":49},
+  {"source":54,"target":26},
+  {"source":55,"target":51},
+  {"source":55,"target":49},
+  {"source":55,"target":39},
+  {"source":55,"target":54},
+  {"source":55,"target":26},
+  {"source":55,"target":11},
+  {"source":55,"target":16},
+  {"source":55,"target":25},
+  {"source":55,"target":41},
+  {"source":55,"target":48},
+  {"source":56,"target":49},
+  {"source":56,"target":55},
+  {"source":57,"target":55},
+  {"source":57,"target":41},
+  {"source":57,"target":48},
+  {"source":58,"target":55},
+  {"source":58,"target":48},
+  {"source":58,"target":27},
+  {"source":58,"target":57},
+  {"source":58,"target":11},
+  {"source":59,"target":58},
+  {"source":59,"target":55},
+  {"source":59,"target":48},
+  {"source":59,"target":57},
+  {"source":60,"target":48},
+  {"source":60,"target":58},
+  {"source":60,"target":59},
+  {"source":61,"target":48},
+  {"source":61,"target":58},
+  {"source":61,"target":60},
+  {"source":61,"target":59},
+  {"source":61,"target":57},
+  {"source":61,"target":55},
+  {"source":62,"target":55},
+  {"source":62,"target":58},
+  {"source":62,"target":59},
+  {"source":62,"target":48},
+  {"source":62,"target":57},
+  {"source":62,"target":41},
+  {"source":62,"target":61},
+  {"source":62,"target":60},
+  {"source":63,"target":59},
+  {"source":63,"target":48},
+  {"source":63,"target":62},
+  {"source":63,"target":57},
+  {"source":63,"target":58},
+  {"source":63,"target":61},
+  {"source":63,"target":60},
+  {"source":63,"target":55},
+  {"source":64,"target":55},
+  {"source":64,"target":62},
+  {"source":64,"target":48},
+  {"source":64,"target":63},
+  {"source":64,"target":58},
+  {"source":64,"target":61},
+  {"source":64,"target":60},
+  {"source":64,"target":59},
+  {"source":64,"target":57},
+  {"source":64,"target":11},
+  {"source":65,"target":63},
+  {"source":65,"target":64},
+  {"source":65,"target":48},
+  {"source":65,"target":62},
+  {"source":65,"target":58},
+  {"source":65,"target":61},
+  {"source":65,"target":60},
+  {"source":65,"target":59},
+  {"source":65,"target":57},
+  {"source":65,"target":55},
+  {"source":66,"target":64},
+  {"source":66,"target":58},
+  {"source":66,"target":59},
+  {"source":66,"target":62},
+  {"source":66,"target":65},
+  {"source":66,"target":48},
+  {"source":66,"target":63},
+  {"source":66,"target":61},
+  {"source":66,"target":60},
+  {"source":67,"target":57},
+  {"source":68,"target":25},
+  {"source":68,"target":11},
+  {"source":68,"target":24},
+  {"source":68,"target":27},
+  {"source":68,"target":48},
+  {"source":68,"target":41},
+  {"source":69,"target":25},
+  {"source":69,"target":68},
+  {"source":69,"target":11},
+  {"source":69,"target":24},
+  {"source":69,"target":27},
+  {"source":69,"target":48},
+  {"source":69,"target":41},
+  {"source":70,"target":25},
+  {"source":70,"target":69},
+  {"source":70,"target":68},
+  {"source":70,"target":11},
+  {"source":70,"target":24},
+  {"source":70,"target":27},
+  {"source":70,"target":41},
+  {"source":70,"target":58},
+  {"source":71,"target":27},
+  {"source":71,"target":69},
+  {"source":71,"target":68},
+  {"source":71,"target":70},
+  {"source":71,"target":11},
+  {"source":71,"target":48},
+  {"source":71,"target":41},
+  {"source":71,"target":25},
+  {"source":72,"target":26},
+  {"source":72,"target":27},
+  {"source":72,"target":11},
+  {"source":73,"target":48},
+  {"source":74,"target":48},
+  {"source":74,"target":73},
+  {"source":75,"target":69},
+  {"source":75,"target":68},
+  {"source":75,"target":25},
+  {"source":75,"target":48},
+  {"source":75,"target":41},
+  {"source":75,"target":70},
+  {"source":75,"target":71},
+  {"source":76,"target":64},
+  {"source":76,"target":65},
+  {"source":76,"target":66},
+  {"source":76,"target":63},
+  {"source":76,"target":62},
+  {"source":76,"target":48},
+  {"source":76,"target":58}
+];
+var showType = function(type){
+  switch (type) {
+    case 1:
+      return '疾病';
+      break;
+    case 2:
+      return '药品';
+      break;
+    default:
+      return '未知内容';
+      break;
+  }
+};
+var tip = d3.tip()
+  .attr('class', 'd3-force-tip')
+  .offset([-10, 0])
+  .html(function(d) {
+    return '<span class="force-name">'+d.name+'</span>' +
+           '<span class="force-type">'+showType(d.type)+'</span>'
+    ;
+  });
+var width = 1280,
+    height = 1000;
+var color = d3.scale.category10();
+var force = d3.layout.force()
+    .charge(-200)
+    .linkDistance(160)
+    .size([width, height]);
 
+var svg = d3.select("body").append("svg")
+    .attr("width", '100%')
+    .attr("height",height)
+force
+    .nodes(DataCircles)
+    .links(dataLines)
+    .start();
+var link = svg.selectAll(".link")
+    .data(dataLines)
+    .enter().append("line")
+    .attr("class", "link")
+var node = svg.selectAll(".node")
+    .data(DataCircles)
+    .enter().append("circle")
+    .attr("class", "node")
+    .attr("r", 8)
+    .attr('y', function(d) { return d.y })
+    .attr('x', function(d, i) { return d.x })
+    .style("fill", function(d) { return color(d.type); })
+    .on('mouseover', function(d) {
+        tip.show(d)
+    })
+    .on('mouseout', function(d){
+        tip.hide(d)
+    })
+    .on('click', function(d){
+       svg.selectAll(".link")
+          .attr("class", "link inactive")
+       var relatedLinks = svg.selectAll(".link").filter(function(item){
+          return item.target.index == d.index ;
+       });
+       relatedLinks[0].forEach(function(item){
+          d3.select(item)
+            .attr("class", "link active")
+       })
+    })
+    .call(force.drag)
+    .call(tip);
+  node.append("title")
+      .text(function(d) { return d.name; });
+
+  force.on("tick", function() {
+    link.attr("x1", function(d) { return d.source.x; })
+        .attr("y1", function(d) { return d.source.y; })
+        .attr("x2", function(d) { return d.target.x; })
+        .attr("y2", function(d) { return d.target.y; });
+
+    node.attr("cx", function(d) { return d.x; })
+        .attr("cy", function(d) { return d.y; });
+  });
+</script>

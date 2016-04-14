@@ -37,21 +37,101 @@ body{
   font-weight: bold;
   color:rgba(255,255,255,1);
   margin-right: 5px;
-  text-shadow: 0px 0px 5px rgba(0,0,0,0.8);
+  text-shadow: 0px 0px 5px rgba(0,0,0,1);
 }
 .d3-force-tip .force-type{
   font-size: 12px;
   font-weight: bold;
-  color:rgba(255,255,255,0.8);
-  text-shadow: 0px 0px 5px rgba(0,0,0,0.8);
+  color:rgba(255,255,255,0.95);
+  text-shadow: 0px 0px 5px rgba(0,0,0,1);
 }
+.layer-tuli{
+  position: fixed;
+  left:0;
+  bottom:0;
+  padding:30px;
+}
+.layer-tuli .tulis{
+  width:200px;
 
+}
+.layer-tuli .tulis .tuli{
+  padding-top: 10px;
+  padding-bottom: 10px;
+  text-align: left;
+}
+.layer-tuli .tulis .tuli .circle{
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border-radius:50em;
+  background: #000;
+  margin-right: 10px;
+  font-size: 14px;
+  font-weight: bold;
+}
+.layer-tuli .tulis .tuli .name{
+  color:#fff;
+  display: inline-block;
+  font-size: 13px;
+  font-weight: bold;
+  line-height: 16px;
+  position: relative;
+  top:-2px;
+}
 
 </style>
 <body>
+<div class="layer-tuli">
+  <div class="tulis">
+    <div class="tuli"><span class="circle"></span><span class="name">疾病</span></div>
+    <div class="tuli"><span class="circle"></span><span class="name">药品</span></div>
+    <div class="tuli"><span class="circle"></span><span class="name">药品相互作用</span></div>
+    <div class="tuli"><span class="circle"></span><span class="name">过敏知识</span></div>
+    <div class="tuli"><span class="circle"></span><span class="name">注射剂配伍禁忌</span></div>
+    <div class="tuli"><span class="circle"></span><span class="name">儿童禁忌</span></div>
+    <div class="tuli"><span class="circle"></span><span class="name">老人禁忌</span></div>
+    <div class="tuli"><span class="circle"></span><span class="name">哺乳禁忌</span></div>
+    <div class="tuli"><span class="circle"></span><span class="name">妊娠禁忌</span></div>
+  </div>
+</div>
 <script src="bower_components/d3/d3.min.js"></script>
 <script src="bower_components/d3-tip/index.js"></script>
 <script>
+var showType = function(type){
+  switch (type) {
+    case 1:
+      return '疾病';
+      break;
+    case 2:
+      return '药品';
+      break;
+    case 3:
+      return '药品相互作用';
+      break;
+    case 4:
+      return '过敏知识';
+      break;
+    case 5:
+      return '注射剂配伍禁忌';
+      break;
+    case 6:
+      return '儿童禁忌';
+      break;
+    case 7:
+      return '老人禁忌';
+      break;
+    case 8:
+      return '哺乳禁忌';
+      break;
+    case 9:
+      return '妊娠禁忌';
+      break;
+    default:
+      return '未知内容';
+      break;
+  }
+};
 var DataCircles =[
   {"name":"Myriel","type":1},
   {"name":"Napoleon","type":1},
@@ -386,19 +466,6 @@ var dataLines = [
   {"source":76,"target":48},
   {"source":76,"target":58}
 ];
-var showType = function(type){
-  switch (type) {
-    case 1:
-      return '疾病';
-      break;
-    case 2:
-      return '药品';
-      break;
-    default:
-      return '未知内容';
-      break;
-  }
-};
 var tip = d3.tip()
   .attr('class', 'd3-force-tip')
   .offset([-10, 0])
@@ -410,6 +477,17 @@ var tip = d3.tip()
 var width = 1280,
     height = 1000;
 var color = d3.scale.category10();
+console.log('color',color);
+Array.prototype.forEach.call(document.getElementsByClassName('circle'),function(item,index){
+  item.style.background = color(index+1);
+});
+console.log('nodes',document.querySelectorAll('.tulis .tuli .circle'));
+console.log('nodes',document.getElementsByClassName('circle'));
+// document.getElementsByClassName('circle').forEach(function(item){
+//   // console.log('item');
+//   // item.style.background = red ;
+// });
+
 var force = d3.layout.force()
     .charge(-200)
     .linkDistance(160)
@@ -465,4 +543,5 @@ var node = svg.selectAll(".node")
     node.attr("cx", function(d) { return d.x; })
         .attr("cy", function(d) { return d.y; });
   });
+  
 </script>

@@ -77,6 +77,7 @@ var initData = function(){
   getInspects();
   getTrends();
   getDrugType();
+  initDrugList();
   $.ajax({
     url: '/api/maincategory',
     type: 'GET',
@@ -106,23 +107,39 @@ var initData = function(){
   $('#dragName').bind('keypress',function(event){
     var dragName = $('#dragName').val();
     if(event.keyCode == '13' && dragName != ''){
-        $.ajax({
-          url: '/api/druglist',
-          type: 'GET',
-          data: {drugName: dragName},
-          success: function(e){
-              var results = JSON.parse(e);
-              $('#drugList').empty();
-              results.forEach(function(d){
-                $('#drugList').append('<tr><td><a href="tree.html" target="_blank">'+d.ypmc+'</a></td><td>'+d.gg+'</td><td>'+d.jx+'</td><td>'+d.yfyl+'</td><td>'+d.scqy+'</td></tr>');
-              });
-          }
-        });
+        searchDrug(dragName);
     }
   });
-
   // drawDonut3d('donut3d-chart');
   
+}
+var searchDrug = function(name){
+      $.ajax({
+        url: '/api/druglist',
+        type: 'GET',
+        data: {drugName: name},
+        success: function(e){
+            var results = JSON.parse(e);
+            $('#drugList').empty();
+            results.forEach(function(d){
+              $('#drugList').append('<tr><td><a href="tree.html" target="_blank">'+d.ypmc+'</a></td><td>'+d.gg+'</td><td>'+d.jx+'</td><td>'+d.pzwh+'</td><td>'+d.scqy+'</td></tr>');
+            });
+        }
+      });
+}
+
+var initDrugList = function(){
+      $.ajax({
+        url: '/api/druglistInit',
+        type: 'GET',
+        success: function(e){
+            var results = JSON.parse(e);
+            $('#drugList').empty();
+            results.forEach(function(d){
+              $('#drugList').append('<tr><td><a href="tree.html" target="_blank">'+d.ypmc+'</a></td><td>'+d.gg+'</td><td>'+d.jx+'</td><td>'+d.pzwh+'</td><td>'+d.scqy+'</td></tr>');
+            });
+        }
+      });
 }
 
 var getDrugType = function(){

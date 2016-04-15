@@ -92,6 +92,16 @@ app.get('/api/druglist', function(req,res){
     });
 })
 
+app.get('/api/druglistInit', function(req,res){
+    var urlObj = url.parse(req.url, true, false);
+    db_service.getDrugListInit(function(result){
+        res.contentType('json')
+        res.setHeader('content-type', 'text/html;charset=utf-8');
+        res.write(JSON.stringify(result))
+        res.end()
+    });
+})
+
 app.get('/api/drugsType', function(req,res){
     db_service.getDrugsType(function(result){
         res.contentType('json')

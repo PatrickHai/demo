@@ -175,7 +175,34 @@ exports.getDrugList = function(drugName, success){
               ypmc: d.ypmc,
               gg: d.gg, 
               jx: d.jx, 
-              yfyl: d.yfyl,
+              // yfyl: d.yfyl,
+              pzwh: d.pzwh,
+              scqy: d.scqy
+            });
+        });
+        success(data); 
+      }
+    }  
+  ); 
+};
+
+exports.getDrugListInit = function(success){
+  client.query(  
+    'select * from t_yongyao_detail limit 50',
+    function(err, results, fields) {  
+      if (err) {  
+        throw err;  
+      }  
+      if(results){
+        var data = new Array();
+        results.forEach(function(d){
+          data.push(
+            {
+              dateKey: d.workdate, 
+              ypmc: d.ypmc,
+              gg: d.gg, 
+              jx: d.jx, 
+              pzwh: d.pzwh,
               scqy: d.scqy
             });
         });

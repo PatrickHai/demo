@@ -679,6 +679,8 @@ table tr>td>a {
   color: #7bcc3a
 }
 
+.search .form-control{font-weight:bold; color: #7bcc3a;}
+
 .form-control {
   background: #000;
   padding: 8px 14px;

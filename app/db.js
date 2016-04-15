@@ -161,7 +161,7 @@ exports.getTrends = function(success){
 
 exports.getDrugList = function(drugName, success){
   client.query(  
-    'select * from t_yongyao_detail where ypmc like "%'+ drugName +'%" limit 10',
+    'select * from t_yongyao_detail where ypmc like "%'+ drugName +'%" limit 50',
     function(err, results, fields) {  
       if (err) {  
         throw err;  

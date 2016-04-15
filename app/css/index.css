@@ -657,6 +657,8 @@ table {
   border-spacing: 0;
 }
 
+table tbody tr:hover{ background: #333; }
+
 table tr>th {
   text-align: left;
   font-size: 12px;

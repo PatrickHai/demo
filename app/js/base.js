@@ -78,17 +78,6 @@ var initData = function(){
   getTrends();
   getDrugType();
   initDrugList();
-  $.ajax({
-    url: '/api/maincategory',
-    type: 'GET',
-    success: function(e){
-      maincategory = JSON.parse(e);
-      gauge = drawLiquidChart(maincategory[0].value * 100, "liquid_chart");
-      maincategory.forEach(function(d){
-        $('.list-inline').append('<li><h5 class="text-muted m-t-20">'+d.category+'</h5><h4 class="m-b-0">'+d.value*100+'%</h4></li>');
-      });
-    }
-  });
 
   // initTree();
 

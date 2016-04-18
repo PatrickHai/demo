@@ -11,22 +11,22 @@
 // });
 
 
-var mongo = require('mongodb'), Server = mongo.Server, Db = mongo.Db;
+// var mongo = require('mongodb'), Server = mongo.Server, Db = mongo.Db;
 
-var server = new Server('localhost', 27017, {auto_reconnect: true});
-var db = new Db('test', server);
+// var server = new Server('localhost', 27017, {auto_reconnect: true});
+// var db = new Db('test', server);
 
-exports.getMainCategory = function(success){
-  db.open(function(err, db) {
-      if(!err) {
-          db.collection('maincategory', function(err, collection){
-            collection.find().toArray(function(error, bars){
-              success(bars);
-            });
-          });
-      }
-  });
-};
+// exports.getMainCategory = function(success){
+//   db.open(function(err, db) {
+//       if(!err) {
+//           db.collection('maincategory', function(err, collection){
+//             collection.find().toArray(function(error, bars){
+//               success(bars);
+//             });
+//           });
+//       }
+//   });
+// };
 
 
 
@@ -37,6 +37,7 @@ var TEST_DATABASE = 'silk_tmp';
 // 创建连接  
 var client = mysql.createConnection({  
   host: '123.56.204.219',
+  // host: '10.45.41.22',
   port: '3306',
   user: 'silk_tmp',  
   password: 'silk_tmp',  

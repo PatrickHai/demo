@@ -6,7 +6,6 @@ app.listen(process.env.PORT || 9000)
 
 var url = require('url')
 
-
 var db_service = require('./db')
 
 
@@ -48,15 +47,6 @@ app.get('/api/inspects', function(req,res){
 
 app.get('/api/trends', function(req,res){
     db_service.getTrends(function(result){
-        res.contentType('json')
-        res.setHeader('content-type', 'text/html;charset=utf-8');
-        res.write(JSON.stringify(result))
-        res.end()
-    });
-})
-
-app.get('/api/maincategory', function(req,res){
-    db_service.getMainCategory(function(result){
         res.contentType('json')
         res.setHeader('content-type', 'text/html;charset=utf-8');
         res.write(JSON.stringify(result))

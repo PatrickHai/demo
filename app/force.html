@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+body{
+  background: #000;
+}
+.node {
+  stroke: #fff;
+  stroke-width: 0;
+}
+.node.inactive{
+  opacity: 0;
+}
+.node.active{
+  opacity: 0.9;
+}
+
+.text {
+  fill: white;
+}
+.link {
+  stroke: #999;
+  stroke-opacity: .5;
+  stroke-width: 1.5;
+}
+.link.inactive {
+  stroke: #999;
+  stroke-opacity: 0.1;
+}
+.link.active {
+  stroke: #fff;
+  stroke-opacity: 0.75;
+  stroke-width: 2;
+}
+
+.d3-force-tip{
+  padding:3px 10px;
+  font-size: 12px;
+  line-height: 16px;
+  z-index: 99999;
+}
+.d3-force-tip .force-name{
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: bold;
+  color:rgba(255,255,255,1);
+  margin-right: 5px;
+  text-shadow: 0px 0px 5px rgba(0,0,0,1);
+}
+.d3-force-tip .force-type{
+  font-size: 12px;
+  font-weight: bold;
+  color:rgba(255,255,255,0.95);
+  text-shadow: 0px 0px 5px rgba(0,0,0,1);
+}
+.layer-tuli{
+  position: fixed;
+  left:0;
+  bottom:0;
+  padding:30px;
+}
+.layer-tuli .tulis{
+  width:200px;
+
+}
+.layer-tuli .tulis .tuli{
+  padding-top: 10px;
+  padding-bottom: 10px;
+  text-align: left;
+}
+.layer-tuli .tulis .tuli .circle{
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border-radius:50em;
+  background: #000;
+  margin-right: 10px;
+  font-size: 14px;
+  font-weight: bold;
+}
+.layer-tuli .tulis .tuli .name{
+  color:#fff;
+  display: inline-block;
+  font-size: 13px;
+  font-weight: bold;
+  line-height: 16px;
+  position: relative;
+  top:-2px;
+}
+
+</style>
+<body>
+<div class="layer-tuli">
+  <div class="tulis">
+    <div class="tuli"><span class="circle"></span><span class="name">药品</span></div>
+    <div class="tuli"><span class="circle"></span><span class="name">疾病</span></div>
+    <div class="tuli"><span class="circle"></span><span class="name">药品属性</span></div>
+    <div class="tuli"><span class="circle"></span><span class="name">疾病属性</span></div>
+  </div>
+</div>
+<script src="bower_components/d3/d3.min.js"></script>
+<script src="bower_components/d3-tip/index.js"></script>
+<script>
+var showType = function(type){
+  switch (type) {
+    case 1:
+      return '疾病';
+      break;
+    case 2:
+      return '药品';
+      break;
+    case 3:
+      return '药品相互作用';
+      break;
+    case 4:
+      return '过敏知识';
+      break;
+    case 5:
+      return '注射剂配伍禁忌';
+      break;
+    case 6:
+      return '儿童禁忌';
+      break;
+    case 7:
+      return '老人禁忌';
+      break;
+    case 8:
+      return '哺乳禁忌';
+      break;
+    case 9:
+      return '妊娠禁忌';
+      break;
+    case 10:
+      return '其他';
+      break;
+    default:
+      return '未知内容';
+      break;
+  }
+};
+var DataCircles =[
+  {"name":"药品A","type":1},
+
+  {"name":"药品A疾病1","type":3},
+  {"name":"药品A疾病2","type":3},
+  {"name":"药品A疾病3","type":3},
+  {"name":"药品A疾病4","type":3},
+  {"name":"药品A疾病5","type":3},
+
+  {"name":"药品A属性1","type":2},
+  {"name":"药品A属性2","type":2},
+  {"name":"药品A属性3","type":2},
+  {"name":"药品A属性4","type":2},
+  {"name":"药品A属性5（关联疾病）","type":5},
+
+  {"name":"疾病1属性1","type":4},
+  {"name":"疾病1属性4","type":4},
+  {"name":"疾病1属性3","type":4},
+  {"name":"疾病1属性4","type":4},
+  {"name":"疾病1属性5(关联药品)","type":6}
+
+  
+];
+var dataLines = [
+  // 药品->药品的属性
+  {"source":6,"target":0},
+  {"source":7,"target":0},
+  {"source":8,"target":0},
+  {"source":9,"target":0},
+  {"source":10,"target":0},
+
+  //疾病->药品的关联疾病
+  {"source":1,"target":10},
+  {"source":2,"target":10},
+  {"source":3,"target":10},
+  {"source":4,"target":10},
+  {"source":5,"target":10},
+
+  //疾病->疾病的关联属性
+  {"source":11,"target":1},
+  {"source":12,"target":1},
+  {"source":13,"target":1},
+  {"source":14,"target":1},
+  {"source":15,"target":1}
+
+];
+var tip = d3.tip()
+.attr('class', 'd3-force-tip')
+.offset([-10, 0])
+.html(function(d) {
+  return '<span class="force-name">'+d.name+'</span>'
+  ;
+});
+var width = 1280,
+    height = 1000;
+var color = d3.scale.category10();
+Array.prototype.forEach.call(document.getElementsByClassName('circle'),function(item,index){
+  item.style.background = color(index+1);
+});
+var force = d3.layout.force()
+    .charge(-200)
+    .linkDistance(160)
+    .size([width, height]);
+
+var svg = d3.select("body").append("svg")
+    .attr("width", '100%')
+    .attr("height",height)
+    
+    force
+    .nodes(DataCircles)
+    .links(dataLines)
+    .start();
+
+var link = svg.selectAll(".link")
+    .data(dataLines)
+    .enter().append("line")
+    .attr("class", "link")
+
+var node = svg.selectAll(".node")
+    .data(DataCircles)
+    .enter().append("circle")
+    .attr("class", "node")
+    .attr("r", 16)
+    .attr('y', function(d) { return d.y })
+    .attr('x', function(d, i) { return d.x })
+    .style("fill", function(d) { return color(d.type); })
+    .on('mouseover', function(d) {
+        tip.show(d)
+    })
+    .on('mouseout', function(d){
+        tip.hide(d)
+    })
+    .on('click', function(d){
+        var relatedNodesIndexs = [];
+       // link
+       svg.selectAll(".link").attr("class", "link");
+       var relatedLinks = svg.selectAll(".link").filter(function(item){
+          if(item.target.index == d.index){
+            relatedNodesIndexs.push(item.source.index);
+            return true;  
+          }else{
+            return false;  
+          }
+          
+       });
+       relatedLinks.each(function(){
+          d3.select(this).attr("class", "link active");
+       });
+
+       // node
+       svg.selectAll(".node").attr("class", "node active");
+      var relatedNodes =[];
+       relatedNodesIndexs.forEach(function(item,j){
+          var nodeOne = svg.selectAll(".node").filter(function(entity,i){
+            if(i == item){
+              return true;
+            }
+          });
+         relatedNodes.push(nodeOne[0][0]);
+       })
+      relatedNodes.forEach(function(item){
+         d3.select(item).attr("class", "node active")
+      });
+      d3.select(this).attr("class", "node  active");
+    })
+    .call(tip)
+    .call(
+      function(){
+        console.log('this',this);
+      }
+    )
+    .call(force.drag);
+    
+    node
+      .append("text")
+      .text(function(d) { return d.name; })
+      .attr("class", "text")
+      .style("fill", '#fff' )
+      .attr("x", function(d) { return d.x; })
+      .attr("y", function(d) { return d.y; });
+
+    force
+      .on("tick", function() {
+        link.attr("x1", function(d) { return d.source.x; })
+            .attr("y1", function(d) { return d.source.y; })
+            .attr("x2", function(d) { return d.target.x; })
+            .attr("y2", function(d) { return d.target.y; });
+
+        node.attr("cx", function(d) { return d.x; })
+            .attr("cy", function(d) { return d.y; });
+      });
+    node.each(function(d){
+      d3.select(this).call(tip);
+      // tip.show(d);
+    });
+  
+</script>

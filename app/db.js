@@ -201,10 +201,281 @@ exports.getDrugsType = function(success){
               value: d.type_count
             });
         });
-        success(data); 
+        success(data);
       }
     }  
   ); 
 };
 
+exports.getDrugTree = function(id,success){
+  var logStr = '\n\n==============';
+  var drugId = id;
+  var drugTree = {
+    "name": "",
+    "type": 'drug',
+    "children": [
+      {
+        "name": "药品说明",
+        "type": 'drugInstruction',
+        "children": [
+          {
+            "name": "成分",
+            "type": 'drugProperty',
+            "value":""
+          },
+          {
+            "name": "剂型",
+            "type": 'drugProperty',
+            "value":""
+          },
+          {
+            "name": "类别",
+            "type": 'drugProperty',
+            "value":""
+          },
+          {
+            "name": "生产企业",
+            "type": 'drugProperty',
+            "value":""
+          },
+          {
+            "name": "用法用量",
+            "type": 'drugProperty',
+            "value":""
+          },
+          {
+            "name": "禁忌",
+            "type": 'drugProperty',
+            "value":""
+          },
+          {
+            "name": "注意事项",
+            "type": 'drugProperty',
+            "value":""
+          },
+          {
+            "name": "不良反应",
+            "type": 'drugProperty',
+            "value":""
+          }
+        ]
+      },
+      {
+        "name": "治疗疾病",
+        "type": 'silks',
+        "children": []
+      },
+      {
+        "name": "合理用药",
+        "type": 4,
+        "children": [
+          {
+            "name": "药品相互作用",
+            "type": 8,
+            "content":"text"
+          },
+          {
+            "name": "注射剂配伍禁忌",
+            "type": 8,
+            "content":"text"
+          },
+          {
+            "name": "过敏库",
+            "type": 8,
+            "content":"text"
+          },
+          {
+            "name": "儿童禁忌",
+            "type": 8,
+            "content":"text"
+          },
+          {
+            "name": "老人禁忌",
+            "type": 8,
+            "content":"text"
+          },
+          {
+            "name": "妊娠禁忌",
+            "type": 8,
+            "content":"text"
+          }
+          
+        ]
+      }
+    ]
+  };
+  // drug
+  client.query(  
+    'select * from t_yongyao_detail where id="' + drugId + '"',
+    function(err, result, fields) {  
+      if (err) {  
+        throw err;  
+      }  
+      if(result){
+        var drug = result[0];
+        drugTree.name = drug.ypmc;
+        // 成分
+        drugTree.children[0].children[0].value = drug.cf;
+        // 剂型
+        drugTree.children[0].children[1].value = drug.jx;
+        // OTC 分类
+        drugTree.children[0].children[2].value = drug.otc;
+        // 生产企业
+        drugTree.children[0].children[3].value = drug.scqy;
+        // 用法用量
+        drugTree.children[0].children[4].value = drug.yfyl;
+        // 禁忌
+        drugTree.children[0].children[5].value = drug.jj;
+        // 注意事项
+        drugTree.children[0].children[6].value = drug.zysx;
+        // 不良反应
+        drugTree.children[0].children[7].value = drug.blfy;
+        
+        // console.log(logStr,'drug',drugTree.children[0].children);
+      }
+    }  
+  ); 
+  // drugSilks
+  client.query(  
+    'select * from t_ypjb where yid="'+ drugId + '" limit 5' ,
+    function(err, result, fields) {  
+      if (err) {  
+        throw err;  
+      }  
+      if(result){
+        // result.forEach(function(item,index){
+        //   getSilkTree(item.jid,function(data){
+        //     // console.log(logStr,'silkTree',data);
+        //     drugTree.children[1].children[index] = data;
+        //     if(index == result.length - 1 ){
+        //       success(drugTree);
+        //     }
+        //   });
+        // });
+        var silksMapArr = [];
+        var silksMapStr = '';
+        result.forEach(function(item){
+          silksMapArr.push(item.jid);
+          silksMapStr = "'"+ silksMapArr.join("','")+"'";
+        });
+        client.query(  
+          'select * from t_jb39_list where id in ('+ silksMapStr +')' ,
+          function(err, result, fields) {  
+            if (err) {  
+              throw err;  
+            }  
+            if(result){
+              result.forEach(function(item,index){
+                drugTree.children[1].children[index] = {
+                  name: item.name,
+                  id:item.id,
+                  type: 'silk'
+                }
+              });
+              success(drugTree);
+            }
+          }  
+        ); 
+        
+
+      }
+    }  
+  ); 
+};
+exports.getSilkTree = function(id,success){
+  var silkId = id;
+  var logStr = '\n\n==============\n\n';
+  var silkTree = {
+    "name": "",
+    "type": 'silk',
+    "children": [
+      {
+        "name": "治疗药品",
+        "type": "silkDrug",
+        "children":[]
+      },
+      {
+        "name": "病理",
+        "type": "silkProperty",
+        "value":""
+      },
+      {
+        "name": "部位",
+        "type": "silkProperty",
+        "value":""
+      },
+      {
+        "name": "科室",
+        "type": "silkProperty",
+        "value":""
+      },
+      {
+        "name": "症状",
+        "type": "silkProperty",
+        "value":""
+      }
+      // {
+      //   "name": "检查",
+      //   "type": "silkCheck",
+      //   "children":[]
+      // },
+    ]
+  };
+
+  // silk
+  client.query(  
+    'select * from t_jb39_list where id="' + silkId + '"',
+    function(err, result, fields) {  
+      if (err) {  
+        throw err;  
+      }  
+      if(result){
+        var silk = result[0];
+        silkTree.name = silk.name;
+        silkTree.children[1].value = silk.jb_body;
+        silkTree.children[2].value = silk.bw;
+        silkTree.children[3].value = silk.ks;
+        silkTree.children[4].value = silk.zz;
+      }
+
+    }  
+  ); 
+  // silkDrugs
+  client.query(  
+    'select * from t_ypjb where jid="'+ silkId + '" limit 5' ,
+    function(err, result, fields) {  
+      if (err) {  
+        throw err;  
+      }  
+      if(result){
+        var drugsMapArr = [];
+        var drugsMapStr = '';
+        result.forEach(function(item){
+          drugsMapArr.push(item.yid);
+          drugsMapStr = "'"+ drugsMapArr.join("','")+"'";
+        });
+        client.query(  
+          'select * from t_yongyao_detail where id in ('+ drugsMapStr +')' ,
+          function(err, result, fields) {  
+            if (err) {  
+              throw err;  
+            }  
+            if(result){
+              result.forEach(function(item,index){
+                silkTree.children[0].children[index] = {
+                  name: item.ypmc,
+                  id:item.id,
+                  type: 'drug'
+                }
+              });
+              console.log(logStr,'silkDrugs',silkTree.children[0]);
+              success(silkTree);
+            }
+          }  
+        ); 
+      }
+    }  
+  ); 
+
+};
 

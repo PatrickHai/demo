@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+body{
+  background: #000;
+}
+.node {
+  stroke: #fff;
+  stroke-width: 0;
+  opacity: 0.95;
+}
+
+.link {
+  stroke: #999;
+  stroke-opacity: .5;
+  stroke-width: 1.5;
+}
+.link.inactive {
+  stroke: #999;
+  stroke-opacity: 0;
+}
+.link.active {
+  stroke: #fff;
+  stroke-opacity: 0.75;
+  stroke-width: 2;
+}
+
+.d3-force-tip{
+  padding:3px 10px;
+  font-size: 12px;
+  line-height: 16px;
+  z-index: 99999;
+}
+.d3-force-tip .force-name{
+  font-size: 18px;
+  line-height: 20px;
+  font-weight: bold;
+  color:rgba(255,255,255,1);
+  margin-right: 5px;
+  text-shadow: 0px 0px 5px rgba(0,0,0,1);
+}
+.d3-force-tip .force-type{
+  font-size: 12px;
+  font-weight: bold;
+  color:rgba(255,255,255,0.95);
+  text-shadow: 0px 0px 5px rgba(0,0,0,1);
+}
+.layer-tuli{
+  position: fixed;
+  left:0;
+  bottom:0;
+  padding:30px;
+}
+.layer-tuli .tulis{
+  width:200px;
+
+}
+.layer-tuli .tulis .tuli{
+  padding-top: 10px;
+  padding-bottom: 10px;
+  text-align: left;
+}
+.layer-tuli .tulis .tuli .circle{
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border-radius:50em;
+  background: #000;
+  margin-right: 10px;
+  font-size: 14px;
+  font-weight: bold;
+}
+.layer-tuli .tulis .tuli .name{
+  color:#fff;
+  display: inline-block;
+  font-size: 13px;
+  font-weight: bold;
+  line-height: 16px;
+  position: relative;
+  top:-2px;
+}
+
+</style>
+<body>
+<div class="layer-tuli">
+  <div class="tulis">
+    <div class="tuli"><span class="circle"></span><span class="name">疾病</span></div>
+    <div class="tuli"><span class="circle"></span><span class="name">药品</span></div>
+    <div class="tuli"><span class="circle"></span><span class="name">药品相互作用</span></div>
+    <div class="tuli"><span class="circle"></span><span class="name">过敏知识</span></div>
+    <div class="tuli"><span class="circle"></span><span class="name">注射剂配伍禁忌</span></div>
+    <div class="tuli"><span class="circle"></span><span class="name">儿童禁忌</span></div>
+    <div class="tuli"><span class="circle"></span><span class="name">老人禁忌</span></div>
+    <div class="tuli"><span class="circle"></span><span class="name">哺乳禁忌</span></div>
+    <div class="tuli"><span class="circle"></span><span class="name">妊娠禁忌</span></div>
+    <div class="tuli"><span class="circle"></span><span class="name">其他</span></div>
+  </div>
+</div>
+<script src="bower_components/d3/d3.min.js"></script>
+<script src="bower_components/d3-tip/index.js"></script>
+<script>
+var showType = function(type){
+  switch (type) {
+    case 1:
+      return '疾病';
+      break;
+    case 2:
+      return '药品';
+      break;
+    case 3:
+      return '药品相互作用';
+      break;
+    case 4:
+      return '过敏知识';
+      break;
+    case 5:
+      return '注射剂配伍禁忌';
+      break;
+    case 6:
+      return '儿童禁忌';
+      break;
+    case 7:
+      return '老人禁忌';
+      break;
+    case 8:
+      return '哺乳禁忌';
+      break;
+    case 9:
+      return '妊娠禁忌';
+      break;
+    case 10:
+      return '其他';
+      break;
+    default:
+      return '未知内容';
+      break;
+  }
+};
+var DataCircles =[
+{"name":"CT增强检查", "type":1},
+{"name":"健忘", "type":1},
+{"name":"变形杆菌属", "type":1},
+{"name":"呕吐", "type":1},
+{"name":"咽喉肿痛", "type":1},
+{"name":"四肢酸懒", "type":1},
+{"name":"失眠", "type":1},
+{"name":"心血管疾病", "type":1},
+{"name":"急性咽炎", "type":1},
+{"name":"感冒", "type":1},
+{"name":"手足皲裂", "type":1},
+{"name":"烦躁口渴", "type":1},
+{"name":"细菌性痢疾", "type":1},
+{"name":"胸部刺痛", "type":1},
+{"name":"胸闷", "type":1},
+{"name":"腰膝酸软", "type":1},
+{"name":"膀胱炎", "type":1},
+{"name":"鼻塞流涕", "type":1},
+{"name":"鼻流涕", "type":1},
+{"name":"\"木布\"病迁研不愈", "type":1},
+{"name":"(4)耳鼻喉", "type":1},
+{"name":"-清热通便", "type":1},
+{"name":"-风湿性关节炎", "type":1},
+{"name":"131I放疗", "type":1},
+{"name":"2型糖尿病", "type":1},
+{"name":"2型糖尿病。", "type":1},
+{"name":"2型糖尿病人", "type":1},
+{"name":"99mTc放射单一低能γ射线", "type":1},
+{"name":"A型流感病毒株", "type":1},
+{"name":"ABO血型反定型检测", "type":1},
+{"name":"ALT升高", "type":1},
+{"name":"A型流感病毒", "type":1},
+{"name":"A型流感病毒感染", "type":1},
+{"name":"A组溶血性链球菌咽炎", "type":1},
+{"name":"A组链球菌", "type":1},
+{"name":"A群及C群脑膜炎球菌", "type":1},
+{"name":"Bartter综合征", "type":1},
+{"name":"Bartter综合征", "type":1},
+{"name":"Bechterew氏病", "type":1},
+{"name":"Burger综合征", "type":1},
+{"name":"B族维生素缺乏", "type":1},
+{"name":"B族维生素缺乏症", "type":1},
+{"name":"B细胞性慢性淋巴细胞白血病", "type":1},
+{"name":"CD4细胞", "type":1},
+{"name":"CO2噬织维菌", "type":1},
+{"name":"Crohn病", "type":1},
+{"name":"CT增强扫描", "type":1},
+{"name":"ct检查中增强扫描", "type":1},
+{"name":"CT检查脑脊液循环状况", "type":1},
+{"name":"CT脑池造影", "type":1},
+{"name":"关联病症", "type":3},
+{"name":"关联病症", "type":3},
+{"name":"关联病症", "type":3},
+{"name":"关联病症", "type":3},
+{"name":"关联病症", "type":3},
+{"name":"关联病症", "type":3},
+{"name":"关联病症", "type":3},
+{"name":"关联病症", "type":3},
+{"name":"关联病症", "type":3},
+{"name":"关联病症", "type":3},
+{"name":"关联病症", "type":3},
+{"name":"关联病症", "type":3},
+{"name":"关联病症", "type":3},
+{"name":"关联病症", "type":3},
+{"name":"关联病症", "type":3},
+{"name":"关联病症", "type":3},
+{"name":"关联病症", "type":3},
+{"name":"关联病症", "type":3},
+{"name":"关联病症", "type":3},
+{"name":"关联病症", "type":3},
+{"name":"关联病症", "type":3},
+{"name":"关联病症", "type":3},
+{"name":"关联病症", "type":3},
+{"name":"关联病症", "type":3},
+{"name":"关联病症", "type":3},
+{"name":"关联病症", "type":3},
+{"name":"关联病症", "type":3},
+{"name":"关联病症", "type":3},
+{"name":"关联病症", "type":3},
+{"name":"关联病症", "type":3},
+{"name":"关联病症", "type":3},
+{"name":"关联病症", "type":3},
+{"name":"关联病症", "type":3},
+{"name":"关联病症", "type":3},
+{"name":"关联病症", "type":3},
+{"name":"关联病症", "type":3},
+{"name":"关联病症", "type":3},
+{"name":"关联病症", "type":3},
+{"name":"关联病症", "type":3},
+{"name":"关联病症", "type":3},
+{"name":"关联病症", "type":3},
+{"name":"关联病症", "type":3},
+{"name":"关联病症", "type":3},
+{"name":"关联病症", "type":3},
+{"name":"关联病症", "type":3},
+{"name":"关联病症", "type":3},
+{"name":"关联病症", "type":3},
+{"name":"关联病症", "type":3},
+{"name":"关联病症", "type":3},
+{"name":"关联病症", "type":3},
+{"name":"A+C群脑膜炎球菌多糖疫苗", "type":2},
+{"name":"A群C群脑膜炎球菌多糖疫苗", "type":2},
+{"name":"β-胡萝卜素胶囊", "type":2},
+{"name":"一柱天酒", "type":2},
+{"name":"一清胶囊", "type":2},
+{"name":"一清颗粒", "type":2},
+{"name":"丁蔻理中丸", "type":2},
+{"name":"丁香风油精", "type":2},
+{"name":"七制香附丸", "type":2},
+{"name":"七十味松石丸", "type":2},
+{"name":"七叶神安片", "type":2},
+{"name":"七味养心健脾胶囊", "type":2},
+{"name":"七味榼藤子丸", "type":2},
+{"name":"七味温阳胶囊", "type":2},
+{"name":"七味益气胶囊", "type":2},
+{"name":"七味糖脉舒胶囊", "type":2},
+{"name":"七味胃痛胶囊", "type":2},
+{"name":"七味苁蓉酒", "type":2},
+{"name":"七味螃蟹甲丸", "type":2},
+{"name":"七味都气丸", "type":2},
+{"name":"七子填精口服液", "type":2},
+{"name":"七生力片", "type":2},
+{"name":"七生静片", "type":2},
+{"name":"万宝油", "type":2},
+{"name":"万应甘和茶", "type":2},
+{"name":"万应胶囊", "type":2},
+{"name":"万应茶", "type":2},
+{"name":"万应锭", "type":2},
+{"name":"万应颗粒", "type":2},
+{"name":"万通炎康片", "type":2},
+{"name":"三七冠心宁合剂", "type":2},
+{"name":"三七冠心宁片", "type":2},
+{"name":"三七冠心宁胶囊", "type":2},
+{"name":"三七参蜂口服液", "type":2},
+{"name":"三七花冲剂", "type":2},
+{"name":"三七花颗粒", "type":2},
+{"name":"三九胃泰胶囊", "type":2},
+{"name":"三仁合剂", "type":2},
+{"name":"三勒浆口服液", "type":2},
+{"name":"三参降脂液", "type":2},
+{"name":"三味檀香胶囊", "type":2},
+{"name":"三宝片", "type":2},
+{"name":"三宝胶囊", "type":2},
+{"name":"三金感冒片", "type":2},
+{"name":"三金片", "type":2},
+{"name":"三黄片", "type":2},
+{"name":"三黄胶囊", "type":2},
+{"name":"丙硫氧嘧啶片", "type":2},
+{"name":"东山感冒片", "type":2},
+{"name":"丝萸养血益肾颗粒", "type":2},
+{"name":"关联药品", "type":4},
+{"name":"关联药品", "type":4},
+{"name":"关联药品", "type":4},
+{"name":"关联药品", "type":4},
+{"name":"关联药品", "type":4},
+{"name":"关联药品", "type":4},
+{"name":"关联药品", "type":4},
+{"name":"关联药品", "type":4},
+{"name":"关联药品", "type":4},
+{"name":"关联药品", "type":4},
+{"name":"关联药品", "type":4},
+{"name":"关联药品", "type":4},
+{"name":"关联药品", "type":4},
+{"name":"关联药品", "type":4},
+{"name":"关联药品", "type":4},
+{"name":"关联药品", "type":4},
+{"name":"关联药品", "type":4},
+{"name":"关联药品", "type":4},
+{"name":"关联药品", "type":4},
+{"name":"关联药品", "type":4},
+{"name":"关联药品", "type":4},
+{"name":"关联药品", "type":4},
+{"name":"关联药品", "type":4},
+{"name":"关联药品", "type":4},
+{"name":"关联药品", "type":4},
+{"name":"关联药品", "type":4},
+{"name":"关联药品", "type":4},
+{"name":"关联药品", "type":4},
+{"name":"关联药品", "type":4},
+{"name":"关联药品", "type":4},
+{"name":"关联药品", "type":4},
+{"name":"关联药品", "type":4},
+{"name":"关联药品", "type":4},
+{"name":"关联药品", "type":4},
+{"name":"关联药品", "type":4},
+{"name":"关联药品", "type":4},
+{"name":"关联药品", "type":4},
+{"name":"关联药品", "type":4},
+{"name":"关联药品", "type":4},
+{"name":"关联药品", "type":4},
+{"name":"关联药品", "type":4},
+{"name":"关联药品", "type":4},
+{"name":"关联药品", "type":4},
+{"name":"关联药品", "type":4},
+{"name":"关联药品", "type":4},
+{"name":"关联药品", "type":4},
+{"name":"关联药品", "type":4},
+{"name":"关联药品", "type":4},
+{"name":"关联药品", "type":4},
+{"name":"关联药品", "type":4}]
+;
+var dataLines = [
+{"source":35, "target":50},
+{"source":35, "target":51},
+{"source":7, "target":52},
+{"source":15, "target":53},
+{"source":4, "target":54},
+{"source":4, "target":55},
+{"source":3, "target":56},
+{"source":9, "target":57},
+{"source":14, "target":58},
+{"source":3, "target":59},
+{"source":6, "target":60},
+{"source":6, "target":61},
+{"source":14, "target":62},
+{"source":15, "target":63},
+{"source":15, "target":64},
+{"source":24, "target":65},
+{"source":3, "target":66},
+{"source":1, "target":67},
+{"source":9, "target":68},
+{"source":14, "target":69},
+{"source":15, "target":70},
+{"source":1, "target":71},
+{"source":1, "target":72},
+{"source":6, "target":72},
+{"source":9, "target":73},
+{"source":9, "target":74},
+{"source":4, "target":75},
+{"source":3, "target":76},
+{"source":4, "target":77},
+{"source":4, "target":78},
+{"source":4, "target":79},
+{"source":14, "target":80},
+{"source":14, "target":81},
+{"source":14, "target":82},
+{"source":6, "target":83},
+{"source":4, "target":84},
+{"source":4, "target":85},
+{"source":3, "target":86},
+{"source":14, "target":87},
+{"source":6, "target":88},
+{"source":14, "target":89},
+{"source":6, "target":90},
+{"source":14, "target":90},
+{"source":6, "target":91},
+{"source":6, "target":92},
+{"source":9, "target":93},
+{"source":16, "target":94},
+{"source":4, "target":95},
+{"source":4, "target":96},
+{"source":23, "target":97},
+{"source":9, "target":98},
+{"source":15, "target":99}]
+;
+var tip = d3.tip()
+  .attr('class', 'd3-force-tip')
+  .offset([-10, 0])
+  .html(function(d) {
+    return '<span class="force-name">'+d.name+'</span>' +
+           '<span class="force-type">'+showType(d.type)+'</span>'
+    ;
+  });
+var width = 1280,
+    height = 1000;
+var color = d3.scale.category10();
+Array.prototype.forEach.call(document.getElementsByClassName('circle'),function(item,index){
+  item.style.background = color(index+1);
+});
+var force = d3.layout.force()
+    .charge(-200)
+    .linkDistance(160)
+    .size([width, height]);
+
+var svg = d3.select("body").append("svg")
+    .attr("width", '100%')
+    .attr("height",height)
+force
+    .nodes(DataCircles)
+    .links(dataLines)
+    .start();
+var link = svg.selectAll(".link")
+    .data(dataLines)
+    .enter().append("line")
+    .attr("class", "link")
+var node = svg.selectAll(".node")
+    .data(DataCircles)
+    .enter().append("circle")
+    .attr("class", "node")
+    .attr("r", 8)
+    .attr('y', function(d) { return d.y })
+    .attr('x', function(d, i) { return d.x })
+    .style("fill", function(d) { return color(d.type); })
+    .on('mouseover', function(d) {
+        tip.show(d)
+    })
+    .on('mouseout', function(d){
+        tip.hide(d)
+    })
+    .on('click', function(d){
+       svg.selectAll(".link")
+          .attr("class", "link inactive")
+       var relatedLinks = svg.selectAll(".link").filter(function(item){
+          return item.target.index == d.index ;
+       });
+       relatedLinks[0].forEach(function(item){
+          d3.select(item)
+            .attr("class", "link active")
+       })
+    })
+    .call(force.drag)
+    .call(tip);
+  node.append("title")
+      .text(function(d) { return d.name; });
+
+  force.on("tick", function() {
+    link.attr("x1", function(d) { return d.source.x; })
+        .attr("y1", function(d) { return d.source.y; })
+        .attr("x2", function(d) { return d.target.x; })
+        .attr("y2", function(d) { return d.target.y; });
+
+    node.attr("cx", function(d) { return d.x; })
+        .attr("cy", function(d) { return d.y; });
+  });
+  
+</script>

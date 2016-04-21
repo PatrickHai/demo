@@ -2,7 +2,8 @@ var express = require('express')
 var app = express()
 
 app.use(express.static(__dirname))
-app.listen(process.env.PORT || 9000)
+app.listen(process.env.PORT || 3333)
+console.log('serving http://localhost:3333 ...');
 
 var url = require('url')
 
@@ -36,7 +37,6 @@ app.get('/api/rationalUse', function(req,res){
         res.end()
     });
 })
-
 app.get('/api/inspects', function(req,res){
     db_service.getCategory(4, function(result){
         res.contentType('json')
@@ -100,3 +100,24 @@ app.get('/api/drugsType', function(req,res){
         res.end()
     });
 })
+app.get('/api/drugTree', function(req,res){
+    var urlObj = url.parse(req.url, true, false);
+    var id = urlObj.query.id;
+    db_service.getDrugTree(id, function(result){
+        res.contentType('json')
+        res.setHeader('content-type', 'text/html;charset=utf-8');
+        res.write(JSON.stringify(result))
+        res.end()
+    });
+})
+app.get('/api/silkTree', function(req,res){
+    var urlObj = url.parse(req.url, true, false);
+    var id = urlObj.query.id;
+    db_service.getSilkTree(id, function(result){
+        res.contentType('json')
+        res.setHeader('content-type', 'text/html;charset=utf-8');
+        res.write(JSON.stringify(result))
+        res.end()
+    });
+})
+

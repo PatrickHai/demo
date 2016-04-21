@@ -1,0 +1,197 @@
+{
+  "name": "白加黑",
+  "type": 1,
+  "children": [
+    {
+      "name": "药品说明书",
+      "type": 2,
+      "children": [
+        {
+          "name": "成分",
+          "type": 5,
+          "content":"text"
+        },
+        {
+          "name": "类别",
+          "type": 5,
+          "content":"text"
+        },
+        {
+          "name": "适应症",
+          "type": 5,
+          "content":"text"
+        },
+        {
+          "name": "用法用量",
+          "type": 5,
+          "content":"text"
+        },
+        {
+          "name": "禁忌",
+          "type": 5,
+          "content":"text"
+        },
+        {
+          "name": "不良反应",
+          "type": 5,
+          "content":"text"
+        },
+        {
+          "name": "注意事项",
+          "type": 5,
+          "content":"text"
+        }
+      ]
+    },
+    {
+      "name": "适应疾病",
+      "type": 3,
+      "children": [
+        {
+          "name": "外感风寒感冒",
+          "type": 6,
+          "children": [
+            {
+              "name": "治疗药品",
+              "type": 7,
+              "children":[
+                {
+                    "name":"白加黑",
+                    "text":"12234354",
+                    "type":1
+                },
+                {
+                    "name":"康泰克",
+                    "text":"12234354",
+                    "type":1
+                },
+                {
+                    "name":"感冒通",
+                    "text":"12234354",
+                    "type":1
+                }
+              ]
+            },
+            {
+              "name": "部位",
+              "content":"胳膊"
+            },
+            {
+              "name": "科室",
+              "content":"外科"
+            }
+          ]
+        },
+        {
+          "name": "外感风热感冒",
+          "type": 6,
+          "children": [
+            {
+              "name": "治疗药品",
+              "type": 7,
+              "children":[
+                {
+                    "name":"白加黑",
+                    "text":"12234354",
+                    "type":1
+                },
+                {
+                    "name":"康泰克",
+                    "text":"12234354",
+                    "type":1
+                },
+                {
+                    "name":"感冒通",
+                    "text":"12234354",
+                    "type":1
+                }
+              ]
+            },
+            {
+              "name": "部位",
+              "content":"胳膊"
+            },
+            {
+              "name": "科室",
+              "content":"外科"
+            }
+          ]
+        },
+        {
+          "name": "外感暑湿感冒",
+          "type": 6,
+          "children": [
+            {
+              "name": "治疗药品",
+              "type": 7,
+              "children":[
+                {
+                    "name":"白加黑",
+                    "text":"12234354",
+                    "type":1
+                },
+                {
+                    "name":"康泰克",
+                    "text":"12234354",
+                    "type":1
+                },
+                {
+                    "name":"感冒通",
+                    "text":"12234354",
+                    "type":1
+                }
+              ]
+            },
+            {
+              "name": "部位",
+              "content":"胳膊"
+            },
+            {
+              "name": "科室",
+              "content":"外科"
+            }
+          ]
+        }
+        
+      ]
+    },
+    {
+      "name": "合理用药知识",
+      "type": 4,
+      "children": [
+        {
+          "name": "药品相互作用",
+          "type": 8,
+          "content":"text"
+        },
+        {
+          "name": "注射剂配伍禁忌",
+          "type": 8,
+          "content":"text"
+        },
+        {
+          "name": "过敏库",
+          "type": 8,
+          "content":"text"
+        },
+        {
+          "name": "儿童禁忌",
+          "type": 8,
+          "content":"text"
+        },
+        {
+          "name": "老人禁忌",
+          "type": 8,
+          "content":"text"
+        },
+        {
+          "name": "妊娠禁忌",
+          "type": 8,
+          "content":"text"
+        }
+        
+      ]
+    }
+    
+  ]
+}

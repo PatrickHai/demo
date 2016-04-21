@@ -38,6 +38,43 @@ function create(treeData) {
       
     // Calculate total nodes, max label length
     var color = d3.scale.category10();
+    var showColor = function(type){
+        switch (type) {
+          case 'drug':
+            return color(1-1);
+            break;
+          case 'drugPropertys':
+            return color(2-1);
+            break;
+          case 'drugProperty':
+            return color(3-1);
+            break;
+          case 'silks':
+            return color(4-1);
+            break;
+          case 'silk':
+            return color(5-1);
+            break;
+          case 'silkProperty':
+            return color(6-1);
+            break;
+          case 'usages':
+            return color(7-1);
+            break;
+          case 'usageCategoryy':
+            return color(8-1);
+            break;
+          case 'usage':
+            return color(9-1);
+            break;
+          case 'drugs':
+            return color(10-1);
+            break;
+          default:
+            return color('未知内容');
+            break;
+        }
+    };
 
     var totalNodes = 0;
     var maxLabelLength = 0;
@@ -184,6 +221,7 @@ function create(treeData) {
         .attr("width", viewerWidth)
         .attr("height", viewerHeight)
         .attr("class", "overlay")
+        .call(tip)
         .call(zoomListener);
 
 
@@ -408,8 +446,11 @@ function create(treeData) {
            });
         }else{
             console.log('toggle !!! ');
-            console.log('d._child',d._children);
-            console.log('d.child',d.children);
+            if(d.children){
+                console.log('折叠');
+            }else{
+                console.log('打开');
+            }
             d = toggleChildren(d);
             update(d);
             centerNode(d);
@@ -453,7 +494,6 @@ function create(treeData) {
             .data(nodes, function(d) {
                 return d.id || (d.id = ++i);
             });
-        
 
         // Enter any new nodes at the parent's previous position.
         var nodeEnter = node.enter().append("g")
@@ -469,7 +509,6 @@ function create(treeData) {
             .attr("transform", function(d) {
                 return "translate(" + source.y0 + "," + source.x0 + ")";
             })
-            .call(tip)
             .on('mouseover', function(d) {
                 tip.show(d)
             })
@@ -484,7 +523,7 @@ function create(treeData) {
             .attr("r", 0)
             .style("fill", function(d) {
                 // return d._children ? "lightsteelblue" : "#fff";
-                return color(d.type);
+                return showColor(d.type);
             });
 
         nodeEnter.append("text")

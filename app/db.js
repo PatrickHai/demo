@@ -31,17 +31,6 @@
 
 
 var mysql = require('mysql');  
-      
-var TEST_DATABASE = 'silk_tmp';  
-  
-// 创建连接  
-var client = mysql.createConnection({  
-  host: '123.56.204.219',
-  // host: '10.45.41.22',
-  port: '3306',
-  user: 'silk_tmp',  
-  password: 'silk_tmp',  
-});  
 
 
 // var TEST_DATABASE = 'test';  
@@ -51,11 +40,35 @@ var client = mysql.createConnection({
 //   user: 'root',  
 //   password: '',  
 // });  
+      
+var TEST_DATABASE = 'silk_tmp';  
 
-client.connect();
+function handleError (err) {
+  if (err) {
+    if (err.code === 'PROTOCOL_CONNECTION_LOST') {
+      connect();
+    } else {
+      console.error(err.stack || err);
+    }
+  }
+}
+// 创建连接
+var connect = function(){
+  client = mysql.createConnection({  
+    host: '123.56.204.219',
+    port: '3306',
+    user: 'silk_tmp',  
+    password: 'silk_tmp',  
+  });  
+  client.connect(handleError);
+  client.on('error', handleError);
+}
+
+var client;
+connect();
+
+
 client.query("use " + TEST_DATABASE);
-
-
 
 exports.getMedication = function(success){
   var result = {
@@ -244,7 +257,7 @@ exports.getDrugTree = function(id,success){
     "children": [
       {
         "name": "药品说明",
-        "type": 'drugInstruction',
+        "type": 'drugPropertys',
         "children": [
           {
             "name": "成分",
@@ -295,37 +308,37 @@ exports.getDrugTree = function(id,success){
       },
       {
         "name": "合理用药",
-        "type": 4,
+        "type": 'usages',
         "children": [
           {
             "name": "药品相互作用",
-            "type": 8,
-            "content":"text"
+            "type": 'usageCategory',
+            "value":""
           },
           {
             "name": "注射剂配伍禁忌",
-            "type": 8,
-            "content":"text"
+            "type": 'usageCategory',
+            "value":""
           },
           {
             "name": "过敏库",
-            "type": 8,
-            "content":"text"
+            "type": 'usageCategory',
+            "value":""
           },
           {
             "name": "儿童禁忌",
-            "type": 8,
-            "content":"text"
+            "type": 'usageCategory',
+            "value":""
           },
           {
             "name": "老人禁忌",
-            "type": 8,
-            "content":"text"
+            "type": 'usageCategory',
+            "value":""
           },
           {
             "name": "妊娠禁忌",
-            "type": 8,
-            "content":"text"
+            "type": 'usageCategory',
+            "value":""
           }
           
         ]
@@ -419,7 +432,7 @@ exports.getSilkTree = function(id,success){
     "children": [
       {
         "name": "治疗药品",
-        "type": "silkDrug",
+        "type": "silkProperty",
         "children":[]
       },
       {

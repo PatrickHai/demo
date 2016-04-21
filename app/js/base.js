@@ -111,7 +111,7 @@ var searchDrug = function(name){
             var results = JSON.parse(e);
             $('#drugList').empty();
             results.forEach(function(d){
-              $('#drugList').append('<tr><td><a href="tree.html" target="_blank">'+d.ypmc+'</a></td><td>'+d.gg+'</td><td>'+d.jx+'</td><td>'+d.pzwh+'</td><td>'+d.scqy+'</td></tr>');
+              $('#drugList').append('<tr><td><a href="tree.html?id=' + d.id + '" target="_blank">'+d.ypmc+'</a></td><td>'+d.gg+'</td><td>'+d.jx+'</td><td>'+d.pzwh+'</td><td>'+d.scqy+'</td></tr>');
             });
         }
       });
@@ -125,7 +125,7 @@ var initDrugList = function(){
             var results = JSON.parse(e);
             $('#drugList').empty();
             results.forEach(function(d){
-              $('#drugList').append('<tr><td><a href="tree.html" target="_blank">'+d.ypmc+'</a></td><td>'+d.gg+'</td><td>'+d.jx+'</td><td>'+d.pzwh+'</td><td>'+d.scqy+'</td></tr>');
+              $('#drugList').append('<tr><td><a href="tree.html?id=' + d.id + '" target="_blank">'+d.ypmc+'</a></td><td>'+d.gg+'</td><td>'+d.jx+'</td><td>'+d.pzwh+'</td><td>'+d.scqy+'</td></tr>');
             });
         }
       });

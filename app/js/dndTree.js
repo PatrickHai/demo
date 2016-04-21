@@ -1,7 +1,9 @@
+var id = window.location.href.split("=")[1];
+console.log('id',id);
 $.ajax({
     url:'/api/drugTree/',
     data:{
-        id: '0015a5acc9ef'
+        id: id
     },
     type:'GET',
     success:function(e){

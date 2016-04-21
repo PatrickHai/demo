@@ -185,6 +185,7 @@ exports.getDrugList = function(drugName, success){
         results.forEach(function(d){
           data.push(
             {
+              id: d.id, 
               dateKey: d.workdate, 
               ypmc: d.ypmc,
               gg: d.gg, 
@@ -212,6 +213,7 @@ exports.getDrugListInit = function(success){
         results.forEach(function(d){
           data.push(
             {
+              id: d.id, 
               dateKey: d.workdate, 
               ypmc: d.ypmc,
               gg: d.gg, 
@@ -249,6 +251,10 @@ exports.getDrugsType = function(success){
 };
 
 exports.getDrugTree = function(id,success){
+  if(!id){
+    console.log('参数无效不正确！');
+    return false;
+  }
   var logStr = '\n\n==============';
   var drugId = id;
   var drugTree = {
@@ -383,22 +389,14 @@ exports.getDrugTree = function(id,success){
       if (err) {  
         throw err;  
       }  
-      if(result){
-        // result.forEach(function(item,index){
-        //   getSilkTree(item.jid,function(data){
-        //     // console.log(logStr,'silkTree',data);
-        //     drugTree.children[1].children[index] = data;
-        //     if(index == result.length - 1 ){
-        //       success(drugTree);
-        //     }
-        //   });
-        // });
+      if(result && result.length > 0){
         var silksMapArr = [];
         var silksMapStr = '';
         result.forEach(function(item){
           silksMapArr.push(item.jid);
           silksMapStr = "'"+ silksMapArr.join("','")+"'";
         });
+
         client.query(  
           'select * from t_jb39_list where id in ('+ silksMapStr +')' ,
           function(err, result, fields) {  
@@ -417,8 +415,8 @@ exports.getDrugTree = function(id,success){
             }
           }  
         ); 
-        
-
+      }else{
+        success(drugTree);
       }
     }  
   ); 

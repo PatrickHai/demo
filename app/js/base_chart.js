@@ -26,7 +26,7 @@ var drawBarChart = function(data, chart_id, color){
     .attr('class', 'd3-tip')
     .offset([-10, 0])
     .html(function(d) {
-      return "<strong>"+d.category+":</strong> <span style='color:red'>" + d.value + "</span>";
+      return "<strong><span style='color:#FFF; font-size: 10px;'>"+d.category+":</span></strong><span style='color:#FFF; font-size: 10px;'>" + d.value + "</span>";
     })
 
   var svg = d3.select('#'+chart_id)
@@ -764,19 +764,19 @@ var draw_2lines_datekey = function(data, targets, svg_id, linecolor, dotcolor){
         .attr('class', dotcolor)
         .attr('cx', line1.x())
         .attr('cy', line1.y())
-        .attr('r', 2.5)
+        .attr('r', 5)
         .attr("transform", "translate("+margin.left+","+margin.top+")")
         .on('mouseover', function(d) {
-            d3.select(this).transition().duration(500).attr('r', 4);
+            d3.select(this).transition().duration(500).attr('r', 8);
             var html = "<ul>" +
-                "<li>日期："+ d3.time.format("%Y-%m")(d.dateKey) + "</li>" +
-                "<li>"+targets[0].des+"："+ d[target1] + "</li>" +
+                "<li style='color: #C0C0C0'>日期："+ d3.time.format("%Y-%m")(d.dateKey) + "</li>" +
+                "<li style='color: #C0C0C0'>"+targets[0].des+"："+ d[target1] + "</li>" +
                 "</ul>";
             tip.html(html);
             tip.show();
         })
         .on('mouseout', function() {
-            d3.select(this).transition().duration(500).attr('r', 2.5);
+            d3.select(this).transition().duration(500).attr('r', 5);
             tip.hide();
         });
 

@@ -11,22 +11,22 @@
 // });
 
 
-var mongo = require('mongodb'), Server = mongo.Server, Db = mongo.Db;
+// var mongo = require('mongodb'), Server = mongo.Server, Db = mongo.Db;
 
-var server = new Server('localhost', 27017, {auto_reconnect: true});
-var db = new Db('test', server);
+// var server = new Server('localhost', 27017, {auto_reconnect: true});
+// var db = new Db('test', server);
 
-exports.getMainCategory = function(success){
-  db.open(function(err, db) {
-      if(!err) {
-          db.collection('maincategory', function(err, collection){
-            collection.find().toArray(function(error, bars){
-              success(bars);
-            });
-          });
-      }
-  });
-};
+// exports.getMainCategory = function(success){
+//   db.open(function(err, db) {
+//       if(!err) {
+//           db.collection('maincategory', function(err, collection){
+//             collection.find().toArray(function(error, bars){
+//               success(bars);
+//             });
+//           });
+//       }
+//   });
+// };
 
 
 
@@ -37,6 +37,7 @@ var TEST_DATABASE = 'silk_tmp';
 // 创建连接  
 var client = mysql.createConnection({  
   host: '123.56.204.219',
+  // host: '10.45.41.22',
   port: '3306',
   user: 'silk_tmp',  
   password: 'silk_tmp',  
@@ -161,7 +162,7 @@ exports.getTrends = function(success){
 
 exports.getDrugList = function(drugName, success){
   client.query(  
-    'select * from t_yongyao_detail where ypmc like "%'+ drugName +'%" limit 10',
+    'select * from t_yongyao_detail where ypmc like "%'+ drugName +'%" limit 50',
     function(err, results, fields) {  
       if (err) {  
         throw err;  
@@ -175,7 +176,34 @@ exports.getDrugList = function(drugName, success){
               ypmc: d.ypmc,
               gg: d.gg, 
               jx: d.jx, 
-              yfyl: d.yfyl,
+              // yfyl: d.yfyl,
+              pzwh: d.pzwh,
+              scqy: d.scqy
+            });
+        });
+        success(data); 
+      }
+    }  
+  ); 
+};
+
+exports.getDrugListInit = function(success){
+  client.query(  
+    'select * from t_yongyao_detail limit 50',
+    function(err, results, fields) {  
+      if (err) {  
+        throw err;  
+      }  
+      if(results){
+        var data = new Array();
+        results.forEach(function(d){
+          data.push(
+            {
+              dateKey: d.workdate, 
+              ypmc: d.ypmc,
+              gg: d.gg, 
+              jx: d.jx, 
+              pzwh: d.pzwh,
               scqy: d.scqy
             });
         });

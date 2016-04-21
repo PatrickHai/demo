@@ -657,6 +657,8 @@ table {
   border-spacing: 0;
 }
 
+table tbody tr:hover{ background: #333; }
+
 table tr>th {
   text-align: left;
   font-size: 12px;
@@ -676,6 +678,8 @@ table tr>td {
 table tr>td>a {
   color: #7bcc3a
 }
+
+.search .form-control{font-weight:bold; color: #7bcc3a;}
 
 .form-control {
   background: #000;

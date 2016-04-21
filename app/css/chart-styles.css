@@ -222,9 +222,9 @@ body {
     shape-rendering: crispEdges;
 }
 
-/*.bar{
-    fill: #69c5ff ;
-}*/
+.bar{
+    opacity: 0.8;
+}
 
 .redbar{
     fill: #FF9D6F ;
@@ -235,7 +235,9 @@ body {
 }
 
 .bar:hover {
-    fill: orangered ;
+    /*fill: orangered ;*/
+    opacity: 1;
+    border: 1px solid #FFF;
 }
 .x.axis line {
     stroke: #666;

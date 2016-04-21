@@ -77,17 +77,7 @@ var initData = function(){
   getInspects();
   getTrends();
   getDrugType();
-  $.ajax({
-    url: '/api/maincategory',
-    type: 'GET',
-    success: function(e){
-      maincategory = JSON.parse(e);
-      gauge = drawLiquidChart(maincategory[0].value * 100, "liquid_chart");
-      maincategory.forEach(function(d){
-        $('.list-inline').append('<li><h5 class="text-muted m-t-20">'+d.category+'</h5><h4 class="m-b-0">'+d.value*100+'%</h4></li>');
-      });
-    }
-  });
+  initDrugList();
 
   // initTree();
 
@@ -106,23 +96,39 @@ var initData = function(){
   $('#dragName').bind('keypress',function(event){
     var dragName = $('#dragName').val();
     if(event.keyCode == '13' && dragName != ''){
-        $.ajax({
-          url: '/api/druglist',
-          type: 'GET',
-          data: {drugName: dragName},
-          success: function(e){
-              var results = JSON.parse(e);
-              $('#drugList').empty();
-              results.forEach(function(d){
-                $('#drugList').append('<tr><td>'+d.ypmc+'</td><td>'+d.gg+'</td><td>'+d.jx+'</td><td>'+d.yfyl+'</td><td>'+d.scqy+'</td></tr>');
-              });
-          }
-        });
+        searchDrug(dragName);
     }
   });
-
   // drawDonut3d('donut3d-chart');
   
+}
+var searchDrug = function(name){
+      $.ajax({
+        url: '/api/druglist',
+        type: 'GET',
+        data: {drugName: name},
+        success: function(e){
+            var results = JSON.parse(e);
+            $('#drugList').empty();
+            results.forEach(function(d){
+              $('#drugList').append('<tr><td><a href="tree.html" target="_blank">'+d.ypmc+'</a></td><td>'+d.gg+'</td><td>'+d.jx+'</td><td>'+d.pzwh+'</td><td>'+d.scqy+'</td></tr>');
+            });
+        }
+      });
+}
+
+var initDrugList = function(){
+      $.ajax({
+        url: '/api/druglistInit',
+        type: 'GET',
+        success: function(e){
+            var results = JSON.parse(e);
+            $('#drugList').empty();
+            results.forEach(function(d){
+              $('#drugList').append('<tr><td><a href="tree.html" target="_blank">'+d.ypmc+'</a></td><td>'+d.gg+'</td><td>'+d.jx+'</td><td>'+d.pzwh+'</td><td>'+d.scqy+'</td></tr>');
+            });
+        }
+      });
 }
 
 var getDrugType = function(){

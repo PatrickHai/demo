@@ -1,48 +1,58 @@
 <!DOCTYPE html>
 <meta charset="utf-8">
 <style type="text/css">
+html,body{ height: 100%; }
   body{
-    background: #000;
+   font-family: 'PingFang SC', 'microsoft yahei', 'Helvetica Neue', Helvetica, STHeitiSC-Light, sans-serif;
+   font-weight:bold; 
+   margin: 0;
+   padding:0;
   }
   .node {
     cursor: pointer;
   }
 
   .overlay{
-      background-color:#EEE;
-      background-color:#000;
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0; 
+    background-color:rgba(0,0,0,.3);
+    z-index: 100;
+
   }
-   
+  .gradient{ opacity: 0.95; }
   .node circle {
-    fill: #fff;
-    stroke: #fff;
-    stroke-width: 0px;
+    stroke-width:1.5px; 
+    stroke:#fff;
     r:12px;
+    opacity: 0.8;
   }
-   
+
+  .nodeText {
+    fill:#fff!important;
+    stroke-width:0.1px;
+    stroke:#000;
+  }
+
   .node text {
-    font-size:12px; 
-    font-family:sans-serif;
-    stroke:rgba(255,255,255,0.9);
-    stroke-width:0.8;
+    font-size:13px; 
   }
   
   .node.rootNode > text {
     font-size:18px; 
-    font-family:sans-serif;
-    color:#fff;
-    stroke:#fff;
+
   }
+
   .node.rootNode > circle {
-    fill: #fff;
-    stroke: steelblue;
-    stroke-width: 0px;
     r:18px;
   }
    
+
   .link {
     fill: none;
-    stroke: rgba(255,255,255,0.25);
+    stroke: rgba(255,255,255,0.5);
     stroke-width: 1.5px;
   }
 
@@ -59,27 +69,52 @@
        display: none;
   }
   .d3-force-tip{
-    padding:10px;
-    font-size: 13px;
+    position: relative;
+    padding:10px 20px;
+    font-size: 12px;
+    font-weight: normal;
     line-height: 18px;
     z-index: 99999;
     max-width: 500px;
-    color:rgba(0,0,0,1);
-    background: rgba(255,255,255,0.8);
-    border-radius:4px;
+    background: rgba(255,255,255,0.9);
+    border-radius:3px;
+    color: #000;
   }
+
+  .d3-force-tip:before{
+    position: absolute;
+    bottom: -8px;
+    left: 50%;
+    margin-left: -10px;
+    width: 0;
+    height: 0;
+    border-left: 8px solid transparent;
+    border-right: 8px solid transparent;
+    border-top: 8px solid rgba(255,255,255,0.9);
+    content: "";
+}
   .d3-force-tip.hidden{
     display: none;
   }
   .d3-force-tip.block{
     display: block;
   }
+
 </style>
 <script src="bower_components/jquery-2.2.3.min/index.js"></script>
 <script src="bower_components/d3/d3.min.js"></script>
 <script src="bower_components/d3-tip/index.js"></script>
 <script src="js/dndTree.js"></script>
-<body>
-    <div id="tree-container"></div>
+
+
+
+<body >
+<div id="tree-container" class="gradient"></div>
+
+<script src="js/three.min.js"></script>
+<script src="js/projector.js"></script>
+<script src="js/canvas-renderer.js"></script>
+<script src="js/3d-lines-animation.js"></script>
+<script src="js/color.js"></script>
 </body>
 </html>

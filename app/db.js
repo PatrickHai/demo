@@ -276,7 +276,7 @@ exports.getDrugTree = function(id,success){
             "value":""
           },
           {
-            "name": "类别",
+            "name": "OTC类别",
             "type": 'drugProperty',
             "value":""
           },
@@ -365,7 +365,7 @@ exports.getDrugTree = function(id,success){
         drugTree.children[0].children[0].value = drug.cf;
         // 剂型
         drugTree.children[0].children[1].value = drug.jx;
-        // OTC 分类
+        // OTC分类
         drugTree.children[0].children[2].value = drug.otc;
         // 生产企业
         drugTree.children[0].children[3].value = drug.scqy;

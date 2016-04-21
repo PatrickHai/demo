@@ -1029,8 +1029,8 @@ THREE.CanvasRenderer = function ( parameters ) {
 
 		if ( _contextLineWidth !== value ) {
 
-			_context.lineWidth = value;
-			_contextLineWidth = value;
+			_context.lineWidth = value  /2 ;
+			_contextLineWidth = value /2 ;
 
 		}
 

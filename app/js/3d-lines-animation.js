@@ -3,7 +3,7 @@ var mouseX = 0, mouseY = 0,
             windowHalfX = window.innerWidth / 2,
             windowHalfY = window.innerHeight / 2,
 
-            SEPARATION = 200,
+            SEPARATION = 400,
             AMOUNTX = 1,
             AMOUNTY = 1,
 

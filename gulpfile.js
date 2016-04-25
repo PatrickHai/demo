@@ -47,6 +47,9 @@ gulp.task('release', function() {
 
     gulp.src('*.json')
         .pipe(gulp.dest(output));
+    
+    gulp.src('node_modules')
+        .pipe(gulp.dest(output));
         
     gulp.src(paths.html)
         .pipe(useref())

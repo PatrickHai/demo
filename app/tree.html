@@ -27,7 +27,7 @@ html,body{ height: 100%; }
     stroke-width:1.5px; 
     stroke:#fff;
     r:12px;
-    opacity: 0.8;
+    opacity: 0.85;
   }
 
   .nodeText {
@@ -99,20 +99,21 @@ html,body{ height: 100%; }
   }
 
 </style>
-<script src="bower_components/jquery-2.2.3.min/index.js"></script>
-<script src="bower_components/d3/d3.min.js"></script>
-<script src="bower_components/d3-tip/index.js"></script>
-<script src="js/dndTree.js"></script>
-
 
 
 <body >
 <div id="tree-container" class="gradient"></div>
 
+<!-- build:js js/tree.js -->
+<script src="bower_components/jquery-2.2.3.min/index.js"></script>
+<script src="bower_components/d3/d3.min.js"></script>
+<script src="bower_components/d3-tip/index.js"></script>
+<script src="js/dndTree.js"></script>
 <script src="js/three.min.js"></script>
 <script src="js/projector.js"></script>
 <script src="js/canvas-renderer.js"></script>
 <script src="js/3d-lines-animation.js"></script>
 <script src="js/color.js"></script>
+<!-- endbuild -->
 </body>
 </html>

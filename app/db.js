@@ -44,11 +44,12 @@ var mysql = require('mysql');
 var TEST_DATABASE = 'silk_tmp';  
 
 function handleError (err) {
+  console.log('errorDetail:\n',err);
   if (err) {
-    if (err.code === 'PROTOCOL_CONNECTION_LOST') {
+    if (err.code === 'ETIMEDOUT') {
       connect();
     } else {
-      console.error(err.stack || err);
+      console.error('err.code未被监听:\n',err.stack || err);
     }
   }
 }
@@ -59,16 +60,14 @@ var connect = function(){
     port: '3306',
     user: 'silk_tmp',  
     password: 'silk_tmp',  
+    database: TEST_DATABASE,  
   });  
   client.connect(handleError);
-  client.on('error', handleError);
 }
 
 var client;
 connect();
 
-
-client.query("use " + TEST_DATABASE);
 
 exports.getMedication = function(success){
   var result = {
@@ -110,7 +109,8 @@ exports.getSummary = function(success){
     'SELECT * FROM t_data_summary order by created desc limit 1',  
     function(err, results, fields) {  
       if (err) {  
-        throw err;  
+        // throw err;
+        handleError(err);
       }  
         
       if(results[0]){
@@ -132,7 +132,8 @@ exports.getCategory = function(type, success){
     'select * from t_datatype_summary where data_series = '+ type,  
     function(err, results, fields) {  
       if (err) {  
-        throw err;  
+        // throw err;
+        handleError(err);
       }  
         
       if(results){
@@ -151,7 +152,8 @@ exports.getTrends = function(success){
     'select * from t_data_summary order by workdate',  
     function(err, results, fields) {  
       if (err) {  
-        throw err;  
+        // throw err;
+        handleError(err);
       }  
         
       if(results){
@@ -178,7 +180,8 @@ exports.getDrugList = function(drugName, success){
     'select * from t_yongyao_detail where ypmc like "%'+ drugName +'%" limit 50',
     function(err, results, fields) {  
       if (err) {  
-        throw err;  
+        // throw err;
+        handleError(err);
       }  
       if(results){
         var data = new Array();
@@ -206,7 +209,8 @@ exports.getDrugListInit = function(success){
     'select * from t_yongyao_detail limit 50',
     function(err, results, fields) {  
       if (err) {  
-        throw err;  
+        // throw err;
+        handleError(err);
       }  
       if(results){
         var data = new Array();
@@ -233,7 +237,8 @@ exports.getDrugsType = function(success){
     'select * from t_drugstype',
     function(err, results, fields) {  
       if (err) {  
-        throw err;  
+        // throw err;
+        handleError(err);
       }  
       if(results){
         var data = new Array();
@@ -356,7 +361,8 @@ exports.getDrugTree = function(id,success){
     'select * from t_yongyao_detail where id="' + drugId + '"',
     function(err, result, fields) {  
       if (err) {  
-        throw err;  
+        // throw err;
+        handleError(err);
       }  
       if(result){
         var drug = result[0];
@@ -387,7 +393,8 @@ exports.getDrugTree = function(id,success){
     'select * from t_ypjb where yid="'+ drugId + '" limit 5' ,
     function(err, result, fields) {  
       if (err) {  
-        throw err;  
+        // throw err;
+        handleError(err);
       }  
       if(result && result.length > 0){
         var silksMapArr = [];
@@ -401,7 +408,8 @@ exports.getDrugTree = function(id,success){
           'select * from t_jb39_list where id in ('+ silksMapStr +')' ,
           function(err, result, fields) {  
             if (err) {  
-              throw err;  
+              // throw err;
+              handleError(err);
             }  
             if(result){
               result.forEach(function(item,index){
@@ -466,7 +474,8 @@ exports.getSilkTree = function(id,success){
     'select * from t_jb39_list where id="' + silkId + '"',
     function(err, result, fields) {  
       if (err) {  
-        throw err;  
+        // throw err;
+        handleError(err);
       }  
       if(result){
         var silk = result[0];
@@ -484,7 +493,8 @@ exports.getSilkTree = function(id,success){
     'select * from t_ypjb where jid="'+ silkId + '" limit 5' ,
     function(err, result, fields) {  
       if (err) {  
-        throw err;  
+        // throw err;
+        handleError(err);
       }  
       if(result){
         var drugsMapArr = [];
@@ -497,7 +507,8 @@ exports.getSilkTree = function(id,success){
           'select * from t_yongyao_detail where id in ('+ drugsMapStr +')' ,
           function(err, result, fields) {  
             if (err) {  
-              throw err;  
+              // throw err;
+              handleError(err);
             }  
             if(result){
               result.forEach(function(item,index){
@@ -507,7 +518,6 @@ exports.getSilkTree = function(id,success){
                   type: 'drug'
                 }
               });
-              console.log(logStr,'silkDrugs',silkTree.children[0]);
               success(silkTree);
             }
           }  

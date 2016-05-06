@@ -121,3 +121,15 @@ app.get('/api/silkTree', function(req,res){
     });
 })
 
+app.get('/api/mulu', function(req,res){
+    var query = req.query;
+    console.log('query',query);
+    db_service.getMulu(query,function(result){
+
+        res.contentType('json')
+        res.setHeader('content-type', 'text/html;charset=utf-8');
+        res.write(JSON.stringify(result))
+        res.end()
+    });
+})
+

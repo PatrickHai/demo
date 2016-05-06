@@ -22,7 +22,7 @@ html {
 
 body {
   margin: 0;
-  background: #000;
+  background: #fff;
   height: 100%;
 }
 
@@ -76,7 +76,8 @@ a:focus {
 .row:after,
 .row:before,
 .container-md:before,
-.container-md:after {
+.container-md:after,
+.data-content:after{
   display: table;
   content: " "
 }
@@ -87,7 +88,8 @@ a:focus {
 .container-md:after,
 .dl-horizontal dd:after,
 .form-horizontal .form-group:after,
-.row:after {
+.row:after,
+.data-content:after{
   clear: both
 }
 
@@ -143,7 +145,8 @@ a:focus {
 .invisible {
   visibility: hidden
 }
-
+.margin-0{ margin: 0; }
+.padding-0{ padding: 0; }
 .text-hide {
   font: 0/0 a;
   color: transparent;
@@ -225,6 +228,39 @@ a:focus {
   color: #f74b4b
 }
 
+.softred{color: rgb(236,100,75)}
+.sunsetorange{color: rgb(246, 71, 71)}
+.thunderbird{color: rgb(217, 30, 24)}
+.monza{color: rgb(207, 0, 15)}
+.tallpoppy{color: rgb(192, 57, 43)}
+.oldbrick{color: rgb(150, 40, 27)}
+.radicalred{color: rgb(246, 36, 89)}
+.razzmatazz{color: rgb(219, 10, 91)}
+.rebeccapurple{ color: rgb(102,51, 153)}
+.studio{color: rgb(142, 68, 173)}
+.plum{color: rgb(145, 61, 136)}
+.seance{color: rgb(154, 18, 179)}
+.mediumpurple{color: rgb(191, 85, 236)}
+.honeyflower{color: rgb(103, 65, 114)}
+.pictonblue{color: rgb(34, 167, 240)}
+.summersky{color: rgb(30, 139, 195)}
+.steelblue{color: rgb(75, 119, 190)}
+.chambray{color: rgb(58, 83, 155)}
+.jacksonspurple{color: rgb(31, 58, 147)}
+.niagara{color: rgb(22, 160, 133)}
+.mediumturquoise{color: rgb(78,205,196)}
+.turquoise{color: rgb(54, 215, 183)}
+.caribbeangreen{color: rgb(3, 201, 169)}
+.greenhaze{color: rgb(1, 152, 117)}
+.capehoney{color: rgb(253, 227, 167)}
+.saffron{color: rgb(244,208, 63)}
+.ripelemon{color: rgb(247, 202, 24)}
+.sandstorm{color: rgb(249, 191, 59)}
+.california{color: rgb(248, 148, 6)}
+.jaffa{color: rgb(242, 121, 53)}
+.ecstasy{color: rgb(249, 105, 14)}
+.silversand{color: rgb(189, 195, 199)}
+.lynch{color: rgb(108, 122, 137)}
 .img-responsive {
   display: block;
   max-width: 100%;
@@ -236,7 +272,7 @@ a:focus {
 }
 
 .cards {
-  background: #fff;
+  background: #333;
   width: 100%
 }
 
@@ -638,7 +674,7 @@ body {
 }
 
 .grid-cell {
-  border: 1px solid #111;
+  border: 1px solid #eee;
   padding: 10px;
 }
 
@@ -657,7 +693,8 @@ table {
   border-spacing: 0;
 }
 
-table tbody tr:hover{ background: #333; }
+table tbody tr:hover{ background: #333;}
+table tbody tr:hover td{ color: #fff !important }
 
 table tr>th {
   text-align: left;
@@ -668,29 +705,63 @@ table tr>th {
 table tr>th,
 table tr>td {
   padding: 10px;
-  border-bottom: 1px solid #111;
+  border-bottom: 1px solid #333;
 }
 
 table tr>td {
-  color: #7bcc3a
+  color: #333
 }
 
 table tr>td>a {
-  color: #7bcc3a
+  color: #333
 }
 
-.search .form-control{font-weight:bold; color: #7bcc3a;}
+.search .form-control{font-weight:bold; color: #00bcd4;}
 
 .form-control {
-  background: #000;
+  background: #333;
   padding: 8px 14px;
   width: 100%;
   border: 2px solid #333;
-  color: #555;
+  color: #eee;
 }
 
 .form-control:focus {
   outline: 0;
   box-shadow: none;
-  border: 2px solid #7bcc3a
+  border: 2px solid #00bcd4
 }
+.img-responsive{ display:block; width: 100%; height: auto;  }
+.map-bg{ height: 100%; padding: 0; background:#eee; }
+.map-box{ height: 100%; padding-bottom: 300px;}
+.map-content{ max-width: 800px; margin:-90px auto 0 auto;  }
+.data-heading{ background: #333; padding: 5px 20px; border-bottom: 1px solid #fff; line-height: 30px; position: relative; margin: -1px; color: #fff;}
+.data-heading b{ font-size: 16px;font-weight: normal }
+.data-content{ padding: 20px 10px; position: absolute; width: 100%; height: 400px; bottom:0; box-sizing:border-box;}
+.data-mask{background:rgba(255,255,255,.8);   }
+.data-content .cards{border: 1px solid #fff; background: rgba(255,255,255,.8);}
+.data-content .grid-cell {  border: none; }
+.list,.data-content .cards .table{ height: 308px; overflow-y: scroll;}
+.list,.data-content .cards .table tr:hover{ color: #fff !important; }
+.list{padding:7px 0px !important;}
+.list li{ padding: 5px 15px;  color: #999; font-weight: bold;}
+.list.basic li{  position: relative; font-weight: normal; }
+.list.basic i{ display: inline-block; font-size: 12px; position: absolute; top: 8px; right: 20px; font-weight: normal; } 
+.list li a{ display: block; color:#aaa}
+.list li:hover{ background:  #eee }
+.list li.active{ background: #fff; }
+.list li.active:hover{ background: #eee; }
+.list li.active a{ color: #333}
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -20,19 +20,65 @@
         height:100%;
       }
       .info{
-        /*display: none;*/
+        display: none;
       }
       .caption{
-        /*display: none;*/
+        display: none;
       }
+      #map-wapper{
+        position: relative;
+      }
+      .summary-panel{
+        width:200px;
+        right:0px;
+        left:auto;
+        min-height: 200px;
+        bottom:60px;
+        height: auto;
+        background: rgba(255,255,255,0.8);
+        border-radius:3px;
+        padding:10px;
+        border-top: 3px solid #db2828;
+      }
+
 
     </style>
   </head>
   <body class="">
     <div class="row">
       <div class="col-md-8 col-md-offset-2" >
-        <div class="row">
+        <div class="row" id="map-wapper">
           <div id="map"></div>
+          <div class="layer-bottom summary-panel">
+            <div class="ui middle aligned selection list">
+              <div class="item">
+                <!-- <img class="ui avatar image" src="http://www.semantic-ui.cn/images/avatar/small/daniel.jpg"> -->
+                <div class="content">
+                  <div class="header">北京</div>
+                </div>
+              </div>
+              <div class="item">
+                <!-- <img class="ui avatar image" src="http://www.semantic-ui.cn/images/avatar/small/stevie.jpg"> -->
+                <div class="content">
+                  <div class="header">药品：0</div>
+                </div>
+              </div>
+              <div class="item">
+                <!-- <img class="ui avatar image" src="http://www.semantic-ui.cn/images/avatar/small/elliot.jpg"> -->
+                <div class="content">
+                  <div class="header">诊疗服务：3000</div>
+                </div>
+              </div>
+              <div class="item">
+                <!-- <img class="ui avatar image" src="http://www.semantic-ui.cn/images/avatar/small/christian.jpg"> -->
+                <div class="content">
+                  <div class="header">耗材：2500</div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
         </div>
         <div class="row" id="UIViewContainer">
           
@@ -54,10 +100,10 @@
 
     // data goes here
     var data=[["Gansu",48],["Qinghai",47],["Guangxi",45],["Guizhou",35],["Chongqing",34],["Beijing",12],["Fujian",35],["Anhui",6],["Guangdong",40],["Xizang",3],["Xinjiang",12],["Hainan",21],["Ningxia",8],["Shaanxi",40],["Shanxi",11],["Hubei",1],["Hunan",23],["Sichuan",19],["Yunnan",19],["Hebei",34],["Henan",20],["Liaoning",14],["Shandong",0],["Tianjin",12],["Jiangxi",20],["Jiangsu",37],["Shanghai",34],["Zhejiang",46],["Jilin",38],["Inner Mongol",10],["Heilongjiang",20],["Taiwan",45],["Xianggang",35],["Macau",10]];
-    var title='Population of Sina Weibo users for a specific keyword';
-    var desc='Based on Sina Weibo user profiles during a period of time. Data from weiboscope.';
-    var credits='by Clement Renaud - 2013';
-    var units='Volume of tweets';
+    var title='信息简介';
+    var desc='信息描述信息描述';
+    var credits='hejinonline @ 2016';
+    var units='';
 
 </script>
 

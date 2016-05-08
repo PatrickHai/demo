@@ -153,6 +153,7 @@ var UIFilters = React.createClass({
            return (<option key={i} value={item.region_code}>{item.name}</option>);
          })}
         </select>
+        <a href="#" class="ui button teal pull-right">重置</a>
         <div className="emp15"></div>
       </div>
     );
@@ -167,7 +168,7 @@ var UISummary = React.createClass({
           <tbody>
             <tr>
               <td className="two wide column">地区</td>
-              <td>上海</td>
+              <td>北京</td>
             </tr>
             <tr>
               <td>药品目录</td>

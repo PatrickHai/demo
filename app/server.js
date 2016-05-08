@@ -132,4 +132,15 @@ app.get('/api/mulu', function(req,res){
         res.end()
     });
 })
+app.get('/api/muluSummary', function(req,res){
+    var query = req.query;
+    db_service.getMuluSummary(query,function(result){
+        res.contentType('json')
+        res.setHeader('content-type', 'text/html;charset=utf-8');
+        res.write(JSON.stringify(result))
+        res.end()
+    });
+})
+
+
 

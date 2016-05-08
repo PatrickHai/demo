@@ -529,23 +529,37 @@ exports.getSilkTree = function(id,success){
 };
 exports.getMulu = function(params,success){
   console.log('params',params);
+  var sql = '';
+  if(params.region_code){
+    sql = 'select * from t_mi_data where data_type=\'' + params.data_type + '\' and region_code=\'' + params.region_code + '\' limit 50';  
+  }else{
+    sql = 'select * from t_mi_data where data_type=\'' + params.data_type + '\' limit 50';  
+  }
   client.query(  
-    'select * from t_mi_data where data_type=' + params.data_type + ' limit 50',
+    sql,
     function(err, results, fields) {  
       if (err) {  
-        // throw err;
-        handleError(err);
+        throw err;
+        // handleError(err);
       }  
       if(results){
         var data = new Array();
         console.log('results length',results.length);
+        console.log('results',results);
         results.forEach(function(d){
+          var name ='';
+          if(d.data_name){
+            name = d.data_name;
+          }else{
+            name = d.mi_data_name;
+          }
           data.push(
             {
               id: d.id, 
               region_code: d.region_code, 
               data_type: d.data_type, 
-              name: d.mi_data_name
+              category: d.mi_category,
+              name: name
             });
         });
         success(data); 
@@ -553,4 +567,30 @@ exports.getMulu = function(params,success){
     }  
   ); 
 };
+exports.getMuluSummary = function(params,success){
+  console.log('params',params);
+  var sql = 'select * from t_mi_data where region_code=\'' + params.region_code + '\' limit 50';  ;
+  client.query(  
+    sql,
+    function(err, results, fields) {  
+      if (err) {  
+        throw err;
+        // handleError(err);
+      }  
+      if(results){
+        var data = new Array();
+        console.log('results length',results.length);
+        console.log('results',results);
+        return false;
+        results.forEach(function(d){
+          data.push({
+             
+          });
+        });
+        success(data); 
+      }
+    }  
+  ); 
+};
+
 

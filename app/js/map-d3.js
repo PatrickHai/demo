@@ -42,7 +42,7 @@ var color = function(i){
     if (i==undefined) {return "#cccccc"}
     else return colorScale(i)
 }
-var color = d3.scale.category10()
+// var color = d3.scale.category10()
 
 // BACKGROUND
 svg.append("g")
@@ -176,20 +176,57 @@ function drawProvinces(error, cn) {
         .attr("class", "province")
         .attr("fill", "#cccccc")
         .attr("fill", function(d) { return color(umap[d.properties.name]); })
-        .attr("fill", function(d) { return color(umap[d.properties.name]); })
+        .attr("fill", function(d) { 
+            switch (d.id) {
+                case 5:
+                    return '#db2828'; 
+                    break;
+                case 26:
+                    return '#2185d0'; 
+                    break;
+                case 8:
+                    return '#21ba45'; 
+                    break;
+                case 27:
+                    return '#e03997'; 
+                    break;
+                default:
+                    return '#fff';
+                    break;
+            }
+        })
         .attr("stroke", "black")
         .attr("stroke-width", "0.35")
+        .on('click', function(d) {
+            if(d.id==5){
+                console.log('value', document.querySelector('#provinceSelect').getAttribute('value'));
+                document.querySelector('#provinceSelect').setAttribute('value','110000');
+                console.log('value', document.querySelector('#provinceSelect').getAttribute('value'));
+            }else if(d.id==26){
+                console.log('value', document.querySelector('#provinceSelect').getAttribute('value'));
+                document.querySelector('#provinceSelect').setAttribute('value','310000');
+                console.log('value', document.querySelector('#provinceSelect').getAttribute('value'));
+            }else if(d.id==8){
+                document.querySelector('#provinceSelect').setAttribute('value','440000');
+            }else{
+                document.querySelector('#provinceSelect').setAttribute('value','330000');
+            }
+        })
         .on('mouseover', function(d) {
-            d3.select(this).attr('fill','red');
-            d3.select(this).attr('stroke','transparent');
+            // d3.select(this).attr('fill','red');
+            // d3.select(this).attr('stroke','transparent');
         })
         .on('mouseout', function(d) {
-            d3.select(this).attr('fill',function(d) { return color(umap[d.properties.name]); })
-            d3.select(this).attr('stroke','black');
+            // d3.select(this).attr('fill',function(d) { return color(umap[d.properties.name]); })
+            // d3.select(this).attr('stroke','black');
             
         });
 
-
+    svg.selectAll(".province")
+       .append("div")
+       .text(function(d) { 
+            return d.properties.name_local; 
+        });
 }
 
 // Taiwan
@@ -208,8 +245,8 @@ function drawTaiwan(error, cn) {
         .attr("d", path)
         .attr("id", function(d) { return d.id; })
         .attr("class", "province")
-        .attr("fill", "#cccccc")
-        .attr("fill", function(d) { return color(umap["Taiwan"]); })
+        .attr("fill", "#fff")
+        .attr("fill", function(d) { return '#fff'; })
         .attr("stroke", "black")
         .attr("stroke-width", "0.35");
 }

@@ -21,15 +21,9 @@ html {
 }
 
 body {
-<<<<<<< Updated upstream
   margin: 0;
   background: #fff;
   height: 100%;
-=======
-    margin: 0;
-    background: #fff;
-    height: 100%;
->>>>>>> Stashed changes
 }
 
 article,
@@ -83,15 +77,10 @@ a:focus {
 .row:before,
 .container-md:before,
 .container-md:after,
-<<<<<<< Updated upstream
 .data-content:after{
   display: table;
   content: " "
-=======
-.data-content:after {
-    display: table;
-    content: " "
->>>>>>> Stashed changes
+
 }
 
 .clearfix:after,
@@ -101,13 +90,9 @@ a:focus {
 .dl-horizontal dd:after,
 .form-horizontal .form-group:after,
 .row:after,
-<<<<<<< Updated upstream
 .data-content:after{
   clear: both
-=======
-.data-content:after {
-    clear: both
->>>>>>> Stashed changes
+
 }
 
 .releative {
@@ -692,16 +677,9 @@ a:focus {
 }
 
 .container {
-<<<<<<< Updated upstream
   max-width: 1200px;
   margin: auto;
   padding: 0 15px;
-=======
-    max-width: 1200px;
-    margin: auto;
-    padding: 0 15px;
-    overflow: hidden;
->>>>>>> Stashed changes
 }
 
 .col-md-1,
@@ -842,13 +820,8 @@ body {
 }
 
 .grid-cell {
-<<<<<<< Updated upstream
   border: 1px solid #eee;
   padding: 10px;
-=======
-    border: 1px solid #eee;
-    padding: 10px;
->>>>>>> Stashed changes
 }
 
 .grid-cell.chart {
@@ -866,10 +839,6 @@ table {
     border-spacing: 0;
 }
 
-<<<<<<< Updated upstream
-table tbody tr:hover{ background: #333;}
-table tbody tr:hover td{ color: #fff !important }
-=======
 table tbody tr:hover {
     background: #333;
 }
@@ -878,7 +847,6 @@ table tbody tr:hover td,
 table tbody tr:hover td a {
     color: #fff !important
 }
->>>>>>> Stashed changes
 
 table tr>th {
     text-align: left;
@@ -1049,9 +1017,9 @@ table tr>td>a {
 
 .list li.active a {
     color: #333
->>>>>>> Stashed changes
 }
 .img-responsive{ display:block; width: 100%; height: auto;  }
+#map-wapper{ margin-top: 50px !important; }
 .map-bg{ height: 100%; padding: 0; background:#eee; }
 .map-box{ height: 100%; padding-bottom: 300px;}
 .map-content{ max-width: 800px; margin:-90px auto 0 auto;  }

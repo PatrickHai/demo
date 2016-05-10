@@ -1,99 +1,158 @@
 <!doctype html>
 <html>
-  <head>
-    <meta charset="utf-8">
-    <title></title>
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
-    <!-- build:css css/main.css -->
-    <link rel="stylesheet" href="css/fonts.css" />
-    <link rel="stylesheet" href="css/chart-styles.css" />
-    <link rel="stylesheet" href="http://cdn.bootcss.com/semantic-ui/2.1.8/semantic.min.css">
-    <link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/4.0.0-alpha.2/css/bootstrap.min.css">
-    <link rel="stylesheet" href="http://7xq5ip.com1.z0.glb.clouddn.com/hzb.css">
-    <!-- endbuild -->
-    <style>
-      body{
-        background: #eee;
-      }
-      svg{
-        width:100%;
-        height:100%;
-      }
-      .info{
-        display: none;
-      }
-      .caption{
-        display: none;
-      }
-      #map-wapper{
-        position: relative;
-      }
-      .summary-panel{
-        width:200px;
-        right:0px;
-        left:auto;
-        min-height: 200px;
-        bottom:60px;
-        height: auto;
-        background: rgba(255,255,255,0.8);
-        border-radius:3px;
-        padding:10px;
-        border-top: 3px solid #db2828;
-      }
 
+<head>
+  <meta charset="utf-8">
+  <title></title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+  <!-- build:css css/main.css -->
+  <link rel="stylesheet" href="css/fonts.css" />
+  <link rel="stylesheet" href="css/chart-styles.css" />
+  <link rel="stylesheet" href="http://cdn.bootcss.com/semantic-ui/2.1.8/semantic.min.css">
+  <link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/4.0.0-alpha.2/css/bootstrap.min.css">
+  <link rel="stylesheet" href="http://7xq5ip.com1.z0.glb.clouddn.com/hzb.css">
+  <!-- endbuild -->
+  <style>
+  body {
+    background: #eee;
+  }
+  
+  svg {
+    width: 100%;
+    height: 100%;
+  }
+  
+  .info {
+    display: none;
+  }
+  
+  .caption {
+    display: none;
+  }
+  
+  #map-wapper {
+    position: relative;
+  }
+  
+  .summary-panel {
+    position: absolute;
+    min-width: 120px;
+    right: 80px;
+    min-height: 40px;
+    bottom: 120px;
+    padding: 10px 0;
+    border-top:1px solid #666;
+    border-bottom:1px solid #666;
+    color: #333;
+    font-weight: bold;
+  }
+    .summary-panel  dl{ font-size: 0.8em; margin: 0; }
+    .summary-panel  dl dt{ margin-bottom: 5px; }
+    .summary-panel  dl dd{ margin-bottom:2px; }
+    .ui.dropdown.selection{ width: 100%; min-width: auto !important; box-sizing: border-box; border-radius: 0 !important;  }
+     select{
+      -webkit-appearance: none;
+      padding-right: 20px;
+      padding: 0 24px 0 8px;
+      height: 30px;
+      border: 1px solid #ddd;
+      width: 100%;
+      background-color: #fff;
+      background-image: url(/images/arrow.png) !important;
+      background-repeat: no-repeat !important;
+      background-position: right 12px !important;
+      background-size: 16px !important;
+    }
+    .select-group{ margin:0 -20px; }
+    .select-group span{ display:inline-block; width: 33.3333%; padding:0 5px;   }
+    .select-group h1{ position: absolute; top: 20px; left: 10px; font-size: 24px; opacity: 0.95}
+    table{ border-radius: 0 !important; }
 
-    </style>
-  </head>
-  <body class="">
-    <div class="row">
-      <div class="col-md-8 col-md-offset-2" >
-        <div class="row" id="map-wapper">
-          <div id="map"></div>
-          <div class="layer-bottom summary-panel">
-            <dl class="ui middle aligned selection list">
-     
+  </style>
+</head>
+
+<body class="">
+<div <link rel=stylesheet href="">
+  <div class="row">
+    <div class="col-md-8 col-md-offset-2">
+      <div class="row" id="map-wapper">
+        <div id="map"></div>
+        <div class="summary-panel">
        
-                  <dt>北京</dt>
-                  <dd>药品：0</dd>
-                  <dd>诊疗服务：3000</dd>
-                  <dd>耗材：2500</dd>
-</dl>
-          </div>
-
-        </div>
-        <div class="row" id="UIViewContainer">
+            <dl>
+              <dt>北京</dt>
+              <dd>药品：0</dd>
+              <dd>诊疗服务：3000</dd>
+              <dd>耗材：2500</dd>
+            </dl>
           
         </div>
       </div>
+      <div class="row" id="UIViewContainer">
+      </div>
     </div>
-
-    <!-- <div class="data-content" id="UIPageContainer">
+  </div>
+  <!-- <div class="data-content" id="UIPageContainer">
     </div> -->
-<!-- build:js js/map.js -->
-<script src="bower_components/jquery-2.2.3.min/index.js"></script>
-<script src="http://d3js.org/d3.v3.min.js"></script>
-<script src="http://d3js.org/queue.v1.min.js"></script>
-<script src="http://d3js.org/topojson.v1.min.js"></script>
-<script>
-    // MAP setup
-    var width = 800,
-        height = 550;
+  <!-- build:js js/map.js -->
+  <script src="bower_components/jquery-2.2.3.min/index.js"></script>
+  <script src="http://d3js.org/d3.v3.min.js"></script>
+  <script src="http://d3js.org/queue.v1.min.js"></script>
+  <script src="http://d3js.org/topojson.v1.min.js"></script>
+  <script>
+  // MAP setup
+  var width = 800,
+    height = 550;
 
-    // data goes here
-    var data=[["Gansu",48],["Qinghai",47],["Guangxi",45],["Guizhou",35],["Chongqing",34],["Beijing",12],["Fujian",35],["Anhui",6],["Guangdong",40],["Xizang",3],["Xinjiang",12],["Hainan",21],["Ningxia",8],["Shaanxi",40],["Shanxi",11],["Hubei",1],["Hunan",23],["Sichuan",19],["Yunnan",19],["Hebei",34],["Henan",20],["Liaoning",14],["Shandong",0],["Tianjin",12],["Jiangxi",20],["Jiangsu",37],["Shanghai",34],["Zhejiang",46],["Jilin",38],["Inner Mongol",10],["Heilongjiang",20],["Taiwan",45],["Xianggang",35],["Macau",10]];
-    var title='信息简介';
-    var desc='信息描述信息描述';
-    var credits='hejinonline @ 2016';
-    var units='';
-
-</script>
-
-<script src="js/map-d3.js"></script>
-<script src="js/react/react.js"></script>
-<script src="js/react/react-dom.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.24/browser.min.js"></script>
-<script src="http://cdn.bootcss.com/semantic-ui/2.1.8/semantic.min.js"></script>
-<script type="text/babel" src="js/map-data.js"></script>
-<!-- endbuild -->
+  // data goes here
+  var data = [
+    ["Gansu", 48],
+    ["Qinghai", 47],
+    ["Guangxi", 45],
+    ["Guizhou", 35],
+    ["Chongqing", 34],
+    ["Beijing", 12],
+    ["Fujian", 35],
+    ["Anhui", 6],
+    ["Guangdong", 40],
+    ["Xizang", 3],
+    ["Xinjiang", 12],
+    ["Hainan", 21],
+    ["Ningxia", 8],
+    ["Shaanxi", 40],
+    ["Shanxi", 11],
+    ["Hubei", 1],
+    ["Hunan", 23],
+    ["Sichuan", 19],
+    ["Yunnan", 19],
+    ["Hebei", 34],
+    ["Henan", 20],
+    ["Liaoning", 14],
+    ["Shandong", 0],
+    ["Tianjin", 12],
+    ["Jiangxi", 20],
+    ["Jiangsu", 37],
+    ["Shanghai", 34],
+    ["Zhejiang", 46],
+    ["Jilin", 38],
+    ["Inner Mongol", 10],
+    ["Heilongjiang", 20],
+    ["Taiwan", 45],
+    ["Xianggang", 35],
+    ["Macau", 10]
+  ];
+  var title = '信息简介';
+  var desc = '信息描述信息描述';
+  var credits = 'hejinonline @ 2016';
+  var units = '';
+  </script>
+  <script src="js/map-d3.js"></script>
+  <script src="js/react/react.js"></script>
+  <script src="js/react/react-dom.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.24/browser.min.js"></script>
+  <script src="http://cdn.bootcss.com/semantic-ui/2.1.8/semantic.min.js"></script>
+  <script type="text/babel" src="js/map-data.js"></script>
+  <!-- endbuild -->
 </body>
+
 </html>

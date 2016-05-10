@@ -136,23 +136,29 @@ var UIFilters = React.createClass({
     var provinces = this.state.provinces;
     var cities = this.state.cities;
     return (
-      <div className="row">
-        <h1 className="ui header">医保目录数据</h1>
+      <div className="row select-group">
+      <h1>医保数据目录</h1>
+      <span>
         <select onChange={this.handleProvinceChange} ref="filterProvince" className="ui dropdown selection  button" id="provinceSelect">
          {provinces.map(function(item,i){
            return (<option key={i} value={item.region_code}>{item.name}</option>);
          })}
         </select>
+        </span>
+         <span>
         <select onChange={this.handleChange} ref="filterCity" className="ui dropdown selection  button">
          {cities.map(function(item,i){
            return (<option key={i} value={item.region_code}>{item.name}</option>);
          })}
         </select>
+        </span>
+         <span>
         <select onChange={this.handleChange} ref="filterCategory" className="ui dropdown selection  button">
           <option value="1">药品目录</option>
           <option value="2">医疗服务项目目录</option>
           <option value="3">医疗服务设施目录</option>
         </select>
+        </span>
         <div className="emp15"></div>
       </div>  
     );

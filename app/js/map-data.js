@@ -138,11 +138,6 @@ var UIFilters = React.createClass({
     return (
       <div className="row">
         <h1 className="ui header">医保目录数据</h1>
-        <select onChange={this.handleChange} ref="filterCategory" className="ui dropdown selection  button">
-          <option value="1">药品目录</option>
-          <option value="2">诊疗服务目录</option>
-          <option value="3">医疗耗材目录</option>
-        </select>
         <select onChange={this.handleProvinceChange} ref="filterProvince" className="ui dropdown selection  button" id="provinceSelect">
          {provinces.map(function(item,i){
            return (<option key={i} value={item.region_code}>{item.name}</option>);
@@ -153,9 +148,13 @@ var UIFilters = React.createClass({
            return (<option key={i} value={item.region_code}>{item.name}</option>);
          })}
         </select>
-        <a href="#" class="ui button teal pull-right">重置</a>
+        <select onChange={this.handleChange} ref="filterCategory" className="ui dropdown selection  button">
+          <option value="1">药品目录</option>
+          <option value="2">医疗服务项目目录</option>
+          <option value="3">医疗服务设施目录</option>
+        </select>
         <div className="emp15"></div>
-      </div>
+      </div>  
     );
   }
 
@@ -171,15 +170,15 @@ var UISummary = React.createClass({
               <td>北京</td>
             </tr>
             <tr>
-              <td>药品目录</td>
+              <td>药品</td>
               <td>20000条</td>
             </tr>
             <tr>
-              <td>诊疗服务目录</td>
+              <td>医疗服务项目</td>
               <td>30000条</td>
             </tr>
             <tr>
-              <td>医疗耗材目录</td>
+              <td>医疗服务设施</td>
               <td>2389条</td>
             </tr>
           </tbody>
@@ -211,9 +210,9 @@ var UILists = React.createClass({
         <table className="ui celled table" hidden={data_type !== 1 ? true : false }>
           <thead>
             <tr>
-              <th>药品名</th>
-              <th>通用名</th>
+              <th>药品</th>
               <th>类型</th>
+              <th>自理比例</th>
             </tr>
           </thead>
           <tbody>
@@ -221,8 +220,8 @@ var UILists = React.createClass({
               return (
                 <tr key={i}>
                   <td>{item.name}</td>
-                  <td>{item.general_name}</td>
                   <td>{item.category}</td>
+                  <td></td>
                 </tr>
               )
             })}
@@ -231,7 +230,7 @@ var UILists = React.createClass({
         <table className="ui celled table" hidden={data_type !== 2 ? true : false }>
           <thead>
             <tr>
-              <th>服务名称</th>
+              <th>医疗服务项目</th>
               <th>类型</th>
             </tr>
           </thead>
@@ -249,7 +248,7 @@ var UILists = React.createClass({
         <table className="ui celled table" hidden={data_type !== 3 ? true : false }>
           <thead>
             <tr>
-              <th>耗材名称</th>
+              <th>医疗服务设施</th>
               <th>类型</th>
             </tr>
           </thead>

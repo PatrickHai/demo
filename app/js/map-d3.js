@@ -197,9 +197,6 @@ function drawProvinces(error, cn) {
             var pros = ['北京5','福建6','广东8','湖南16','山东22','江苏25','上海26','浙江27'];
             var arr = [5,25,6,8,16,22,26,27];
             var index = arr.indexOf(d.id);
-            for (var i = 0; i <= 10; i++) {
-               console.log(i,color(i));
-            }
             if(index != -1){
                 if(index == 0 ){
                     return '#d62728';

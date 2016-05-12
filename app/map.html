@@ -5,13 +5,10 @@
   <meta charset="utf-8">
   <title></title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
-  <!-- build:css css/main.css -->
-  <link rel="stylesheet" href="css/fonts.css" />
-  <link rel="stylesheet" href="css/chart-styles.css" />
+  
   <link rel="stylesheet" href="http://cdn.bootcss.com/semantic-ui/2.1.8/semantic.min.css">
   <link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/4.0.0-alpha.2/css/bootstrap.min.css">
   <link rel="stylesheet" href="http://7xq5ip.com1.z0.glb.clouddn.com/hzb.css">
-  <!-- endbuild -->
   <style>
   body {
     background: #eee;
@@ -64,7 +61,7 @@
       background-position: right 12px !important;
       background-size: 16px !important;
     }
-    .select-group{ margin:0 -20px; }
+    .select-group{ margin:0 -15px; }
     .select-group span{ display:inline-block; width: 33.3333%; padding:0 5px;   }
     .select-group h1{ position: absolute; top: 30px; left: 10px; font-size: 28px; opacity: 1; letter-spacing: 2px; font-weight: bold;}
     table{ border-radius: 0 !important; }
@@ -98,7 +95,7 @@
 </head>
 
 <body class="">
-<div <link rel=stylesheet href="">
+<div >
   <div class="row">
     <div class="col-md-8 col-md-offset-2">
       <div class="row" id="map-wapper">
@@ -117,12 +114,12 @@
       </div>
     </div>
   </div>
-  <!-- <div class="data-content" id="UIPageContainer">
-    </div> -->
   <!-- build:js js/map.js -->
   <script src="bower_components/jquery-2.2.3.min/index.js"></script>
-  <script src="http://d3js.org/d3.v3.min.js"></script>
+  <script src="bower_components/d3/d3.min.js"></script>
   <script src="bower_components/d3-tip/index.js"></script>
+  <!-- endbuild -->
+  
   <script src="http://d3js.org/queue.v1.min.js"></script>
   <script src="http://d3js.org/topojson.v1.min.js"></script>
   <script>
@@ -176,9 +173,8 @@
   <script src="js/react/react.js"></script>
   <script src="js/react/react-dom.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.24/browser.min.js"></script>
-  <script src="http://cdn.bootcss.com/semantic-ui/2.1.8/semantic.min.js"></script>
   <script type="text/babel" src="js/map-data.js"></script>
-  <!-- endbuild -->
+  <script src="http://cdn.bootcss.com/semantic-ui/2.1.8/semantic.min.js"></script>
 </body>
 
 </html>

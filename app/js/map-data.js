@@ -198,28 +198,30 @@ var UIFilters = React.createClass({
     var cities = this.state.cities;
     return (
       <div className="row select-group">
-      <h1>全国医保目录数据概览</h1>
-      <span>
-        <select onChange={this.handleProvinceChange} ref="filterProvince" className="ui dropdown selection  button" id="provinceSelect">
-         {provinces.map(function(item,i){
-           return (<option key={i} value={item.region_code}>{item.name}</option>);
-         })}
-        </select>
-        </span>
-         <span>
-        <select onChange={this.handleChange} ref="filterCity" className="ui dropdown selection  button">
-         {cities.map(function(item,i){
-           return (<option key={i} value={item.region_code}>{item.name}</option>);
-         })}
-        </select>
-        </span>
-         <span>
-        <select onChange={this.handleChange} ref="filterCategory" className="ui dropdown selection  button">
-          <option value="1">药品目录</option>
-          <option value="2">医疗服务项目目录</option>
-          <option value="3">医疗服务设施目录</option>
-        </select>
-        </span>
+        <h1>全国医保目录数据概览</h1>
+        <div className="row">
+          <div className="col-xs-4">
+            <select onChange={this.handleProvinceChange} ref="filterProvince" className="ui dropdown selection  button" id="provinceSelect">
+             {provinces.map(function(item,i){
+               return (<option key={i} value={item.region_code}>{item.name}</option>);
+             })}
+            </select>
+          </div>
+          <div className="col-xs-4">
+            <select onChange={this.handleChange} ref="filterCity" className="ui dropdown selection  button">
+             {cities.map(function(item,i){
+               return (<option key={i} value={item.region_code}>{item.name}</option>);
+             })}
+            </select>
+          </div>
+          <div className="col-xs-4">
+            <select onChange={this.handleChange} ref="filterCategory" className="ui dropdown selection  button">
+              <option value="1">药品目录</option>
+              <option value="2">医疗服务项目目录</option>
+              <option value="3">医疗服务设施目录</option>
+            </select>
+          </div>
+        </div>
         <div className="emp15"></div>
       </div>  
     );
@@ -242,7 +244,7 @@ var UISummary = React.createClass({
             {items.map( function(element, index) {
               if(element.data_type == 1){
                 return (
-                  <tr>
+                  <tr key={index}>
                     <td>药品</td>
                     <td>{element.total}条</td>
                   </tr>
@@ -250,7 +252,7 @@ var UISummary = React.createClass({
               }
               if(element.data_type == 2){
                 return (
-                  <tr>
+                  <tr key={index}>
                     <td>医疗服务项目</td>
                     <td>{element.total}条</td>
                   </tr>
@@ -258,7 +260,7 @@ var UISummary = React.createClass({
               }
               if(element.data_type == 3){
                 return (
-                  <tr>
+                  <tr key={index}>
                     <td>医疗服务设施</td>
                     <td>{element.total}条</td>
                   </tr>

@@ -56,30 +56,84 @@ var getInspects = function(){
   });
 }
 
-var getTrends = function(){
+var getTrends = function(arr){
   $.ajax({
     url: '/api/trends',
     type: 'GET',
     success: function(e){
-      draw_2lines_datekey(JSON.parse(e), [{target: 'drugs', des: '药品数量'}], 'line-chart', 'blueline', 'bluelinecircle');
-      draw_2lines_datekey(JSON.parse(e), [{target: 'illnesses', des: '疾病数量'}], 'line-chart1','greenline', 'greenlinecircle');
-      draw_2lines_datekey(JSON.parse(e), [{target: 'medications', des: '合理用药'}], 'line-chart2','yellowline', 'yellowlinecircle');
-      draw_2lines_datekey(JSON.parse(e), [{target: 'inspects', des: '检查化验'}], 'line-chart3', 'redline', 'redlinecircle');
+      arr.forEach(function(d){
+        switch(d){
+          case 'drugs':
+          draw_2lines_datekey(JSON.parse(e), [{target: 'drugs', des: '药品数量'}], 'line-chart', 'blueline', 'bluelinecircle');
+          break;
+          case 'ilnesses':
+          draw_2lines_datekey(JSON.parse(e), [{target: 'illnesses', des: '疾病数量'}], 'line-chart1','greenline', 'greenlinecircle');
+          break;
+          case 'medications':
+          draw_2lines_datekey(JSON.parse(e), [{target: 'medications', des: '合理用药'}], 'line-chart2','yellowline', 'yellowlinecircle');
+          break;
+          case 'inspects':
+          draw_2lines_datekey(JSON.parse(e), [{target: 'inspects', des: '检查化验'}], 'line-chart3', 'redline', 'redlinecircle');
+          break;
+        }
+      });
     }
   });
 }
 
+var toggleActive = function($element){
+  $element.siblings().removeClass('active');
+  $element.addClass('active');
+}
+
+var toggleTags = function($element){
+  $element.show();
+  $element.siblings().hide();
+}
+
+var showDrugCharts = function(e){
+    toggleActive($(e));
+    toggleTags($('#tab-1'));
+    getDosageType();
+    getTrends(['drugs']);
+    getDrugType();
+}
+var showIllnessesCharts = function(e){
+    toggleActive($(e));
+    toggleTags($('#tab-2'));
+    getIllnessType();
+    getTrends(['ilnesses']);
+  }
+var showInspectsCharts = function(e){
+    toggleActive($(e));
+    toggleTags($('#tab-3'));
+    getInspects();
+    getTrends(['inspects']);
+}
+
 var initData = function(){
   getSummary();
-  getDosageType();
-  getIllnessType();
-  getRationalUse();
-  getInspects();
-  getTrends();
-  getDrugType();
+  // getIllnessType();
+  // getRationalUse();
+  // getInspects();
+  // getTrends();
+  // getDrugType();
   initDrugList();
 
-  // initTree();
+  $('.charts').children().hide();
+  showDrugCharts();
+
+  $('.first').click(function(){
+    showDrugCharts(this);
+  });
+
+  $('.second').click(function(){
+    showIllnessesCharts(this);
+  });
+
+  $('.third').click(function(){
+    showInspectsCharts(this);
+  });
 
   $('#searchMedication').click(function(){
     var medicationName = $('#medicationName').val();

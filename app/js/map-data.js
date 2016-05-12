@@ -28,7 +28,7 @@ var UIFilters = React.createClass({
         'children':[
           {
             'region_code':'440000',
-            'name':'广东',
+            'name':'省本级',
           },
           {
             'region_code':'440600',
@@ -42,7 +42,7 @@ var UIFilters = React.createClass({
         'children':[
           {
             'region_code':'330000',
-            'name':'浙江'
+            'name':'省本级'
           },
           {
             'region_code':'330100',
@@ -53,7 +53,67 @@ var UIFilters = React.createClass({
             'name':'温州'
           }
         ]
+      },
+      {
+        'region_code':'320000',
+        'name':'江苏',
+        'children':[
+          {
+            'region_code':'320000',
+            'name':'省本级'
+          },
+          {
+            'region_code':'320100',
+            'name':'南京'
+          },
+          {
+            'region_code':'320500',
+            'name':'苏州'
+          }
+        ]
+      },
+      {
+        'region_code':'350000',
+        'name':'福建',
+        'children':[
+          {
+            'region_code':'350000',
+            'name':'省本级'
+          }
+        ]
+      },
+      {
+        'region_code':'370000',
+        'name':'山东',
+        'children':[
+          {
+            'region_code':'370000',
+            'name':'省本级'
+          }
+        ]
+      },
+      {
+        'region_code':'510000',
+        'name':'四川',
+        'children':[
+          {
+            'region_code':'510000',
+            'name':'省本级'
+          }
+        ]
+      },
+      {
+        'region_code':'410000',
+        'name':'河南',
+        'children':[
+          {
+            'region_code':'410000',
+            'name':'省本级'
+          }
+        ]
       }
+
+
     ];
   },
   getInitialState: function() {
@@ -68,7 +128,6 @@ var UIFilters = React.createClass({
   },
   componentDidMount: function() {
     console.log('filterbar didMount!');
-    
     this.ajaxRegions();
     this.setState({
       provinces:this.state.regions,
@@ -89,21 +148,23 @@ var UIFilters = React.createClass({
     this.handleChangeByProvince();
 
     // map
-    var map = $('path.province div');
-    map.each(function(){
-      var str = $(this).text();
-      if(str.indexOf(province_name)>=0){
-        $(this).parent().css({
-          "fill":"red",
-          "stroke":'red'
-        });
-      }else{
-        $(this).parent().css({
-          "fill":"#fff",
-          "stroke":'#333'
-        });
-      }
-    });
+    // var map = $('path.province div');
+    // map.each(function(){
+    //   var str = $(this).text();
+    //   if(str.indexOf(province_name)>=0){
+    //     $(this).parent().css({
+    //       "fill":"red",
+    //       "stroke":'red'
+    //     });
+    //   }else{
+    //     $(this).parent().css({
+    //       "fill":"#fff",
+    //       "stroke":'#333'
+    //     });
+    //   }
+    // });
+
+    // react
     // console.log('设置state');
     // this.setState({cities:cities});
     // city的select内容修改，但是select的onchang事件未触发。
@@ -137,7 +198,7 @@ var UIFilters = React.createClass({
     var cities = this.state.cities;
     return (
       <div className="row select-group">
-      <h1>医保数据目录</h1>
+      <h1>全国医保目录数据概览</h1>
       <span>
         <select onChange={this.handleProvinceChange} ref="filterProvince" className="ui dropdown selection  button" id="provinceSelect">
          {provinces.map(function(item,i){
@@ -167,29 +228,45 @@ var UIFilters = React.createClass({
 });
 var UISummary = React.createClass({
   render: function() {
+    var region_name = this.props.data.region_name;
+    var items = this.props.data.items || [];
+    console.log('items',items);
     return (
-      <div className="row">
+      <div className="row" hidden={items.length>0 ? false:true}>
         <table className="ui definition table">
           <tbody>
             <tr>
               <td className="two wide column">地区</td>
-              <td>北京</td>
+              <td>{region_name}</td>
             </tr>
-            <tr>
-              <td>药品</td>
-              <td>20000条</td>
-            </tr>
-            <tr>
-              <td>医疗服务项目</td>
-              <td>30000条</td>
-            </tr>
-            <tr>
-              <td>医疗服务设施</td>
-              <td>2389条</td>
-            </tr>
+            {items.map( function(element, index) {
+              if(element.data_type == 1){
+                return (
+                  <tr>
+                    <td>药品</td>
+                    <td>{element.total}条</td>
+                  </tr>
+                );
+              }
+              if(element.data_type == 2){
+                return (
+                  <tr>
+                    <td>医疗服务项目</td>
+                    <td>{element.total}条</td>
+                  </tr>
+                )
+              }
+              if(element.data_type == 3){
+                return (
+                  <tr>
+                    <td>医疗服务设施</td>
+                    <td>{element.total}条</td>
+                  </tr>
+                )
+              }
+            })}
           </tbody>
         </table>
-        <div className="emp"></div>
       </div>
     );
   }
@@ -328,7 +405,7 @@ var UIView = React.createClass({
       }
     }
     this.ajaxLists(query);
-    // this.ajaxSummary(query);
+    this.ajaxMuluSummary(query);
   },
   getInitialState: function() {
     return {

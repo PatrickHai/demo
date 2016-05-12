@@ -544,7 +544,6 @@ exports.getMulu = function(params,success){
       }  
       if(results){
         var data = new Array();
-        console.log('results length',results.length);
         console.log('results',results);
         results.forEach(function(d){
           var name ='';
@@ -562,6 +561,7 @@ exports.getMulu = function(params,success){
               name: name
             });
         });
+        console.log('data',data);
         success(data); 
       }
     }  
@@ -569,28 +569,36 @@ exports.getMulu = function(params,success){
 };
 exports.getMuluSummary = function(params,success){
   console.log('params',params);
-  var sql = 'select * from t_mi_data where region_code=\'' + params.region_code + '\' limit 50';  ;
+  var sql2 = 'select data_type, count(*) as total from t_mi_data where region_code='+ params.region_code +' group by data_type';
+  var sql1 = 'select region_name from t_region where region_code="' + params.region_code + '"';
+  var data = {
+    region_name:'',
+    items:[]
+  };
   client.query(  
-    sql,
-    function(err, results, fields) {  
+    sql1,
+    function(err, results1, fields) {  
       if (err) {  
         throw err;
         // handleError(err);
       }  
-      if(results){
-        var data = new Array();
-        console.log('results length',results.length);
-        console.log('results',results);
-        return false;
-        results.forEach(function(d){
-          data.push({
-             
-          });
-        });
-        success(data); 
+      if(results1){
+        data.region_name = results1[0].region_name;
+        client.query(sql2,function(err,results2,fields){
+          if(results2){
+            results2.forEach( function(element, index) {
+              data.items.push({
+                data_type:element.data_type,
+                total:element.total,
+              });
+            });
+            success(data);
+          }
+        })
       }
     }  
   ); 
+  
 };
 
 

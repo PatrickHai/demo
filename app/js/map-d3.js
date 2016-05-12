@@ -5,7 +5,21 @@ data.map(function(d) {umap[d[0]]=Number(d[1])});
 console.log(umap);
 
 var v = Object.keys(umap).map(function(k){return umap[k]})
-var color = d3.scale.category20();
+
+var showTip = function(d) {
+   if(d.value){
+        d3.select('.d3-map-tip').attr('class', 'd3-map-tip block');
+        return '<div>'+d.properties.name_local+'</div>';
+   }else{
+        d3.select('.d3-map-tip').attr('class', 'd3-map-tip hidden');
+        return '<div>'+d.properties.name_local+'</div>';
+   }
+};
+var tip = d3.tip()
+  .html(function(d){return showTip(d);})
+  .offset([0, 10])
+  .attr('class', 'd3-map-tip');
+
 // console.log(v);
 
 // LOAD DATA
@@ -25,7 +39,8 @@ var svg = d3.select("#map").append("svg")
     .attr("width", width)
     .attr("height", height)
     .attr("preserveAspectRatio", "xMidYMid")
-    .attr("viewBox", "0 0 " + width + " " + height);
+    .attr("viewBox", "0 0 " + width + " " + height)
+    .call(tip);
 
 var path = d3.geo.path()
     .projection(projection);
@@ -43,6 +58,7 @@ var color = function(i){
     else return colorScale(i)
 }
 // var color = d3.scale.category10()
+
 
 // BACKGROUND
 svg.append("g")
@@ -162,7 +178,7 @@ function drawProvinces(error, cn) {
         
     // };
     // console.log(codes);
-
+    var color = d3.scale.category20();
     svg.append("g")
         .attr("class", "map")
         .append("g")
@@ -177,22 +193,22 @@ function drawProvinces(error, cn) {
         .attr("fill", "#cccccc")
         .attr("fill", function(d) { return color(umap[d.properties.name]); })
         .attr("fill", function(d) { 
-            switch (d.id) {
-                case 5:
-                    return '#db2828'; 
-                    break;
-                case 26:
-                    return '#2185d0'; 
-                    break;
-                case 8:
-                    return '#21ba45'; 
-                    break;
-                case 27:
-                    return '#e03997'; 
-                    break;
-                default:
-                    return '#fff';
-                    break;
+            // '四川17','河南20',
+            var pros = ['北京5','福建6','广东8','湖南16','山东22','江苏25','上海26','浙江27'];
+            var arr = [5,25,6,8,16,22,26,27];
+            var index = arr.indexOf(d.id);
+            for (var i = 0; i <= 10; i++) {
+               console.log(i,color(i));
+            }
+            if(index != -1){
+                if(index == 0 ){
+                    return '#d62728';
+                }else{
+                  return color(index);
+                }
+                
+            }else{
+                return '#fff';
             }
         })
         .attr("stroke", "black")
@@ -213,10 +229,12 @@ function drawProvinces(error, cn) {
             }
         })
         .on('mouseover', function(d) {
+            tip.show(d)
             // d3.select(this).attr('fill','red');
             // d3.select(this).attr('stroke','transparent');
         })
         .on('mouseout', function(d) {
+            tip.hide(d)
             // d3.select(this).attr('fill',function(d) { return color(umap[d.properties.name]); })
             // d3.select(this).attr('stroke','black');
             

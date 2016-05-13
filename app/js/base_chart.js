@@ -1,10 +1,10 @@
 var drawBarChart = function(data, chart_id, color){
   var parentWidth = $('#'+chart_id).parent().width();
-  var parentHeight = $('#'+chart_id).parent().height();
-  var margin = {top: parentHeight*0.3, right: parentWidth*0.02, bottom: parentHeight*0.02, left: parentWidth*0.02},
+  // var parentHeight = $('#'+chart_id).parent().height();
+  var parentHeight = 260;
+  var margin = {top: parentHeight*0.1, right: parentWidth*0.02, bottom: parentHeight*0.02, left: parentWidth*0.02},
       width = parentWidth - margin.left - margin.right,
       height = parentHeight - margin.top - margin.bottom;
-
   var formatPercent = d3.format(".0%");
 
   var x = d3.scale.ordinal()
@@ -26,11 +26,13 @@ var drawBarChart = function(data, chart_id, color){
     .attr('class', 'd3-tip')
     .offset([-10, 0])
     .html(function(d) {
-      return "<strong><span style='color:#FFF; font-size: 10px;'>"+d.category+":</span></strong><span style='color:#FFF; font-size: 10px;'>" + d.value + "</span>";
+      return "<strong><span style='color:#C0C0C0; font-size: 10px;'>"+d.category+":</span></strong><span style='color:#C0C0C0; font-size: 10px;'>" + d.value + "</span>";
     })
 
-  var svg = d3.select('#'+chart_id)
-      .attr("width", width + margin.left + margin.right)
+  var svg = d3.select('#'+chart_id);
+  svg.selectAll("*").remove();
+
+  svg.attr("width", width + margin.left + margin.right)
       .attr("height", height + margin.top + margin.bottom)
       .append("g")
       .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
@@ -662,10 +664,12 @@ var drawTreeChart = function(data, chart_id){
 
 var draw_2lines_datekey = function(data, targets, svg_id, linecolor, dotcolor){
     var svg = d3.select('#'+svg_id);
+    svg.selectAll("*").remove();
     var parentWidth = $('#'+svg_id).parent().width();
-    var parentHeight = $('#'+svg_id).parent().height();
+    // var parentHeight = $('#'+svg_id).parent().height();
+    var parentHeight = 260;
     var width_svg = parentWidth,height_svg = parentHeight;
-    var margin = {top: parentHeight*0.3, right: parentWidth*0.05, bottom: parentHeight*0.1, left: parentWidth*0.12};
+    var margin = {top: parentHeight*0.1, right: parentWidth*0.05, bottom: parentHeight*0.1, left: parentWidth*0.12};
     var width = width_svg - margin.left - margin.right;
     var height = height_svg - margin.top - margin.bottom;
 
@@ -868,11 +872,13 @@ var drawDonut3d = function(svg_id){
 }
 var drawPie = function(data, svg_id){
   var parentWidth = $('#'+svg_id).parent().width();
-  var parentHeight = $('#'+svg_id).parent().height();
+  // var parentHeight = $('#'+svg_id).parent().height();
+  var parentHeight = 178;
+  console.log(parentWidth, parentHeight);
   var width = parentWidth*0.9,height = parentHeight*0.9,radius = Math.min(width, height) / 2;
   var arc = d3.svg.arc()
       .outerRadius(radius - parentHeight/15)
-      .innerRadius(parentWidth*0.125);
+      .innerRadius(parentWidth*0.11);
 
   var labelArc = d3.svg.arc()
       .outerRadius(radius - 35)
@@ -882,8 +888,10 @@ var drawPie = function(data, svg_id){
       .sort(null)
       .value(function(d) { return d.value; });
 
-  var svg = d3.select("#"+svg_id)
-      .attr("width", width)
+  var svg = d3.select('#'+svg_id);
+  svg.selectAll("*").remove();
+
+   svg.attr("width", width)
       .attr("height", height)
       .append("g")
       .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");  
@@ -892,6 +900,7 @@ var drawPie = function(data, svg_id){
   var g = svg.selectAll(".arc")
       .data(pie(data))
       .enter().append("g")
+      .attr("transform", "translate(200,80)")
       .attr("class", "arc");
 
     g.append("path")
@@ -912,7 +921,8 @@ function legend(lD, id){
     var parentWidth = $('#'+id).parent().width();
     var parentHeight = $('#'+id).parent().height();
     // create table for legend.
-    var legend = d3.select('#'+id).append("table");
+    d3.select('#'+id).selectAll("table").remove();
+    var legend = d3.select('#'+id).append("table").attr('class', 'chart-table');
     
     // create one row per segment.
     var tr = legend.append("tbody").selectAll("tr").data(lD).enter().append("tr");

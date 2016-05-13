@@ -275,7 +275,12 @@ var UISummary = React.createClass({
 
 });
 var UILists = React.createClass({
+  showDetail:function(id){
+    $('.ui.modal').modal('show');
+    this.props.onShowDetail({id:id});
+  },
   render: function() {
+    var _this = this;
     var lists= this.props.data;
     var data_type = null;
     if(lists.length > 0){
@@ -296,8 +301,10 @@ var UILists = React.createClass({
           <thead>
             <tr>
               <th>药品</th>
+              <th>剂型</th>
               <th>类型</th>
-              <th>自理比例</th>
+              <th>自付比例</th>
+              <th>其他</th>
             </tr>
           </thead>
           <tbody>
@@ -305,8 +312,10 @@ var UILists = React.createClass({
               return (
                 <tr key={i}>
                   <td>{item.name}</td>
+                  <td>{item.jixing}</td>
                   <td>{item.category}</td>
-                  <td></td>
+                  <td>{item.payment}</td>
+                  <td><div className="ui button default tiny" onClick={_this.showDetail.bind(_this,item.id)}>更多</div></td>
                 </tr>
               )
             })}
@@ -317,6 +326,7 @@ var UILists = React.createClass({
             <tr>
               <th>医疗服务项目</th>
               <th>类型</th>
+              <th>自付比例</th>
             </tr>
           </thead>
           <tbody>
@@ -325,6 +335,7 @@ var UILists = React.createClass({
                 <tr key={i}>
                   <td>{item.name}</td>
                   <td>{item.category}</td>
+                  <td>{item.payment}</td>
                 </tr>
               )
             })}
@@ -335,6 +346,7 @@ var UILists = React.createClass({
             <tr>
               <th>医疗服务设施</th>
               <th>类型</th>
+              <th>自付比例</th>
             </tr>
           </thead>
           <tbody>
@@ -343,6 +355,7 @@ var UILists = React.createClass({
                 <tr key={i}>
                   <td>{item.name}</td>
                   <td>{item.category}</td>
+                  <td>{item.payment}</td>
                 </tr>
               )
             })}
@@ -352,8 +365,50 @@ var UILists = React.createClass({
       </div>
     );
   }
+});
+
+var UIModal = React.createClass({
+  componentDidMount: function() {
+  },
+  show:function(){
+    $('.ui.modal').modal('show');
+  },
+  hide:function(){
+    $('.ui.modal').modal('hide');
+  },
+  render: function() {
+    var item = this.props.data;
+    var status = function(item){
+      if(item.length<1){
+        return 'loading';
+      }else{
+        return 'loaded';
+      }
+    };
+    return (
+      <div className="ui small modal">
+        <i className="close icon"></i>
+        <div className="header">
+          数据详情
+        </div>
+        <div className="image content" style={{postion:'relative'}}>
+            // <div className="ui active inverted dimmer" hidden={status == 'loading' ? true:false}>
+            //   <div className="ui small text loader" >加载中...</div>
+            // </div>
+            <div className="" hidden={status == 'loaded' ? true:false}>
+              这里是数据
+            </div>
+        </div>
+        <div className="actions">
+          <div className="ui button" onClick={this.hide}>Cancel</div>
+          <div className="ui button" onClick={this.hide}>OK</div>
+        </div>
+      </div>
+    );
+  }
 
 });
+
 
 var UIView = React.createClass({
   ajaxLists:function(query){
@@ -371,7 +426,22 @@ var UIView = React.createClass({
       }.bind(this)
     });
   },
-  ajaxMuluSummary:function(query){
+  ajaxList:function(query){
+    var url = '/api/mulu';
+    $.ajax({
+      url: url,
+      dataType: 'json',
+      type: 'GET',
+      data: query,
+      success: function(data) {
+        this.setState({list: data});
+      }.bind(this),
+      error: function(xhr, status, err) {
+        console.error(url, status, err.toString());
+      }.bind(this)
+    });
+  },
+  ajaxSummary:function(query){
     var url = '/api/muluSummary';
     $.ajax({
       url: url,
@@ -407,11 +477,15 @@ var UIView = React.createClass({
       }
     }
     this.ajaxLists(query);
-    this.ajaxMuluSummary(query);
+    this.ajaxSummary(query);
+  },
+  handleShowDetail:function(query){
+    this.ajaxList(query);
   },
   getInitialState: function() {
     return {
       lists: [],
+      list: {},
       summary: {}
     };
   },
@@ -423,7 +497,8 @@ var UIView = React.createClass({
       <div className="ui container">
         <UIFilters onFilterChanged={this.handleFilterChanged}/>
         <UISummary data={this.state.summary} />
-        <UILists data={this.state.lists} />
+        <UILists data={this.state.lists} onShowDetail={this.handleShowDetail}/>
+        <UIModal data={this.state.list} />
       </div>
     );
   }

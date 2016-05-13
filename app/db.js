@@ -546,20 +546,36 @@ exports.getMulu = function(params,success){
         var data = new Array();
         console.log('results',results);
         results.forEach(function(d){
-          var name ='';
-          if(d.data_name){
-            name = d.data_name;
-          }else{
-            name = d.mi_data_name;
-          }
-          data.push(
-            {
+          if(params.data_type == 1){
+            data.push({
               id: d.id, 
-              region_code: d.region_code, 
-              data_type: d.data_type, 
-              category: d.mi_category,
-              name: name
+              data_type: d.data_type,
+              name: d.data_name || d.mi_data_name,
+              category: d.mi_category || d.data_category,
+              payment:d.data_payment,
+              jixing:d.data_dosage
             });
+          }
+          if(params.data_type == 2){
+            data.push({
+              id: d.id, 
+              data_type: d.data_type,
+              name: d.data_name || d.mi_data_name,
+              category: d.mi_category || d.data_category,
+              payment:d.data_payment,
+              jixing:d.dosage
+            });
+          }
+          if(params.data_type == 3){
+            data.push({
+              id: d.id, 
+              data_type: d.data_type,
+              name: d.data_name || d.mi_data_name,
+              category: d.mi_category || d.data_category,
+              payment:d.data_payment,
+              jixing:d.dosage
+            });
+          }
         });
         console.log('data',data);
         success(data); 
